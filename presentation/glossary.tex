@@ -1,0 +1,58 @@
+\usepackage[acronym]{glossaries-extra}%
+\setabbreviationstyle[acronym]{long-short}
+
+\newcommandx\acr[5][4=,5=]{
+  \ifthenelse{\equal{#5}{}}
+  {
+    \acrSing{#1}{#2}{#3}
+  }
+  {
+    \acrPl{#1}{#2}{#3}{#4}{#5}
+  }
+  \expandafter\newcommand\csname #1long\endcsname{\glsdesc{#1}}
+  \expandafter\newcommand\csname #1short\endcsname{\glsname{#1}}
+}
+
+\newcommandx\symbl[4][4=,]{
+  \ifthenelse{\equal{#4}{}}
+  {
+    \symblnosort{#1}{#2}{#3}
+  }
+  {
+    \symblwithsort{#1}{#2}{#3}{#4}
+  }
+}
+
+\newcommand{\acrSing}[3]{\newacronym{#1}{#2}{#3}
+  \expandafter\newcommand\csname #1\endcsname{\gls{#1}}}
+
+\newcommand{\acrPl}[5]{
+  \newacronym[plural=#4,firstplural=#5 (#4)]{#1}{#2}{#3}
+  \expandafter\newcommand\csname #1\endcsname{\gls{#1}}
+  \expandafter\newcommand\csname #1s\endcsname{\glspl{#1}}
+}
+
+\acr{vtwox}{V2X}{Vehicle to everything}
+\acr{uwb}{UWBR}{Ultra-Wideband Ranging}
+\acr{gnss}{GNSS}{Global Navigation Satellite Systems}
+\acr{rtk}{RTK}{Real Time Kinematics}
+\acr{kf}{KF}{Kalman Filter}
+\acr{linearinclusion}{LI}{linear inclusion}[LIs][linearinclusions]
+\acr{ekf}{EKF}{Extended Kalman Filter}
+\acr{ukf}{UKF}{Unscented Kalman Filter}
+\acr{sivia}{SIVIA}{Set Inversion Via Interval Analysis Algorithm}
+\acr{vsivia}{VSIVIA}{Vectorized SIVIA}
+\acr{zoh}{ZOH}{Zero-Order Hold}
+
+\acr{smf}{SMF}{Set Membership Filter}[SMFs][Set Membership Filters]
+\acr{czesmf}{CZESMF}{Constrained Zonotope Extended Set Membership Filter}
+\acr{iesmf}{IESMF}{Iterated Extended Set Membership Filter}
+\acr{ia}{IA}{Interval Arithmetic}
+\acr{tddd}{T3D}{Time-Differenced Double phase Difference}
+\acr{uas}{UAS}{Unmanned Aircraft System}[UASs][Unmanned Aircraft Systems]
+\acr{cz}{$\mathcal{CZ}$}{Constrained Zonotope}[$\mathcal{CZ}$s][Constrained Zonotopes]
+\acr{cgrep}{CG-Rep}{Constrained Generator Representation}
+\acr{grep}{G-Rep}{Generator Representation}
+\acr{hrep}{H-Rep}{Half-space Representation}
+
+\glsdisablehyper

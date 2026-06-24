@@ -1,0 +1,1912 @@
+\documentclass[aspectratio=169]{conf-beamer}
+
+\input{preamble}
+
+% \setbeameroption{show notes on second screen}
+\draft
+% \webcast
+% \setbeamercolor{alerted text}{fg=supelecRed!20!red!80}
+% \usetikzlibrary{overlay-beamer-styles}
+% \includeonlyframes{current,current1,current2,current3,current4,current5,current6,current7}
+
+\bibliography{../article/bibliography.bib}
+
+\title[Constrained Zonotopes-based localization under uncertain observation times] % (optional, use only with long paper titles)
+{Guaranteed autonomous vehicles localization \\under uncertain observation times using \\constrained zonotopes set-membership filtering}
+
+% \subtitle
+% {or How I Learned to Stop and Worry about Everything}
+
+\author[Nogueira, Fergani]
+{{\bfseries R. A. Nogueira} \inst{1} \and S. Fergani \inst{2}}
+
+\conferenceLogo{logos/IFAC_2026_Logo_png.png}
+\conferenceLogoback{white}
+
+\institute
+{
+    \inst{1} Université d'Angers/LARIS \and \inst{2} Université de Toulouse/LAAS-CNRS
+
+    \vspace{.5cm}
+    \begin{tikzpicture}
+      \node[inner sep=.1cm,fill=white]{
+      \includegraphics[height=1cm]{logos/laris.jpg}\hspace{.1cm} \includegraphics[height=1cm]{logos/logo-laas.jpg}
+      };
+    \end{tikzpicture}
+  }
+
+\day24 \month08 \year2026
+\makeatletter
+\date[IFAC WC 2026]{23rd IFAC World Congress 2026 --- \@date}
+\makeatother
+
+\logo{\includegraphics[width=1.5cm]{logos/IFAC_2026_Logo_png.png}\quad}
+
+\AtBeginSection[]
+{
+  \begin{frame}{Outline}
+    \tableofcontents[sectionstyle=show/hide,subsectionstyle=show/show/hide]
+  \end{frame}
+}
+
+\begin{document}
+
+\part{Intégration}
+\begin{frame}[plain]
+  \titlepage%
+  % \vfill
+\end{frame}
+
+\begin{frame}{Context}
+  \begin{itemize}
+    \item \todo{Increase of use of autonomous systems}
+    \item \todo{Some applications need ``good'' state estimatives (decimetrique)}
+    \item \todo{Autonomous Vehicles}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Usual solution: KF based algorithms}
+  \begin{itemize}
+    \item[+] \todo{Low computational cost}
+    \item[--] \todo{Assumptions on probability distributions of process and observation noises}
+    \item[--] \todo{No formal guarantees (use of confidence regions)}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Alternative: Set Membership Filters}
+  \begin{itemize}
+    \item[+] Uncertainties are described by sets (no error distribution)
+    \item[--] \todo{No formal guarantees (use of confidence regions)}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Contributions}
+  \begin{itemize}
+    \item An easily implementable \smflong\ for nonlinear systems based on constrained zonotopes admitting asynchronous observations with uncertain observation times.
+    \item A benchmark study comparing the proposed filter with:
+          \begin{itemize}
+            \item \iesmflong~\citep{Bolting2018b},
+            \item \vsivialong\ \cite{herrero2012efficient},
+            \item \ekf.
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents[sectionstyle=show/show,subsectionstyle=hide/hide/hide]
+\end{frame}
+
+\section{Background}
+
+\begin{frame}{Background}{Constrained Zonotopes --- Definition}
+\begin{equation}
+  \set{Z}= \langle G,\vec{c},A,\vec{b}\rangle = \{G \vec{\xi} + \vec{c} \; \mid \; \norm{\vec{\xi}}_\infty \leq 1, A\vec{\xi} = \vec{b}\}  \subset \mathbb{R}^n.
+\end{equation}
+\end{frame}
+
+\begin{frame}{Background}{Constrained Zonotopes --- Operations}
+
+  \begin{align}
+  R\set{Z}_a=&\langle RG_a,R\vec{c}_a, A_a,\vec{b}_a\rangle,\\
+  \set{Z}_a + \set{Z}_b=&\left\langle
+                          \left[\begin{smallmatrix}
+                            G_a&
+                                 G_b
+                          \end{smallmatrix}\right] ,\vec{c}_a+\vec{c}_b, \left[\begin{smallmatrix}
+                            A_a& 0\\
+                            0  & A_b
+                          \end{smallmatrix}\right],
+                          \left[\begin{smallmatrix}
+                            \vec{b}_a\\
+                            \vec{b}_b
+                          \end{smallmatrix}\right]
+                          \right\rangle\text{ and}\\
+  \set{Z}_a\cap_R \set{Z}_c=&\left\langle
+                              \left[\begin{smallmatrix}
+                                G_a&
+                                     0
+                              \end{smallmatrix}\right] ,\vec{c}_a, \left[\begin{smallmatrix}
+                                A_a & 0\\
+                                0   & A_c\\
+                                RG_a&  -G_c
+                              \end{smallmatrix}\right],
+                              \left[\begin{smallmatrix}
+                                \vec{b}_a\\
+                                \vec{b}_b\\
+                                \vec{c}_c-R\vec{c}_a
+                              \end{smallmatrix}\right]
+                              \right\rangle.\label{eq:generalized_intersection}
+\end{align}
+
+\end{frame}
+
+\section{Problem Statement}
+
+\begin{frame}{State estimation}
+  \begin{block}{}
+    Given a system's state and observation dynamics,\\ compute regions ${\set{X}(t) \subset \mathbb{R}^n}$, such that $\vec{x}(t)\in\set{X}(t)$, $\forall t\geq0$.
+  \end{block}
+\end{frame}
+
+\begin{frame}{State Dynamics}
+  \begin{equation*}
+    \vec{x}(t_{k}) = \vec{f}(\vec{x}(t_{k-1}),\vec{u}(t_{k-1})) + \vec{q}(t_{k-1})
+    \label{eq:setfilter_plant_static}
+  \end{equation*}
+\end{frame}
+
+\begin{frame}{Uncertain observations}
+  \begin{align}
+  \begin{bmatrix}
+    \vec{y}(t) \\ \hat{t}_y(t)
+  \end{bmatrix}
+  &=
+    \begin{bmatrix}
+      \vec{h}(\vec{x}(t), \vec{u}(t), t) &+& \vec{w}(t) \\
+      t &+& w_t(t)
+    \end{bmatrix}%\\
+  %   \begin{bmatrix}
+  %   {y}_1(t) \\
+  %   \vdots \\
+  %   {y}_{m(t)}(t) \\
+  %   \hat{t}_y(t)
+  % \end{bmatrix}
+  %   &=
+%    \begin{bmatrix}
+%      h_1(\vec{x}(t), \vec{u}(t), t) &+& w_{1}(t) \\
+%                                     &\vdots&\\
+%      h_{m(t)}(\vec{x}(t), \vec{u}(t), t) &+& w_{m}(t) \\
+%      t &+& w_t(t)
+%    \end{bmatrix}
+    \label{eq:setfilter_obs2}
+\end{align}
+\end{frame}
+
+\section{CZESFM}
+\SetKwFor{Loop}{Loop}{}{EndLoop}
+\SetKwBlock{propagation}{Conditional propagation:}{}
+\SetKwBlock{reduction}{Conditional reduction:}{}
+
+\begin{frame}{CZESFM}
+  \centering
+  \resizebox*{!}{.7\paperheight}{
+  \begin{algorithm2e}[H]
+\small
+\DontPrintSemicolon%
+$\post{\set{Z}_{\vec{x}}}(t_0)\gets$ Initialization (\S\ref{sec:initialization}), $k\gets 1$\;
+    \Loop{}{
+    \propagation{
+      \uIf{$\sup(t_{k-1} - [t_{y,k}]) \leq \ubound{\Delta {t}}$ \tcp{Closeness}
+ {\bf or} $[t_{y,k}] == [t_{y,k-1}]$ \tcp{Synchronicity}
+  }{
+    $\pre{\set{Z}}_{\vec{x}}(t_{k}) \gets \post{\set{Z}}_{\vec{x}}(t_{k-1})$\;
+  }\uElse{\scalebox{0.9}{
+    %Compute \linearinclusion\; %\eqref{eq:czesmf_propainlcusion}\;
+    $\pre{\set{Z}}_{\vec{x}}(t_{k}) \gets \textrm{Propagation} \left(\post{\set{Z}}_{\vec{x}}(t_{k-1}),{\set{Z}}_{\vec{u}}(t_{k-1})\right)$~\eqref{eq:cz_propagation}\;
+  }}}
+$\upd{\set{Z}_{\vec{x}}}(t_k)\gets \textrm{Update}\left(\pre{\set{Z}}_{\vec{x}}(t_k),\vec{z}(t_k),\set{Z}_{\vec{u}}(t_k)\right)$ \eqref{eq:czesmf_update_start}\;
+\reduction{
+  \uIf{$n_g(\set{Z}'_{\vec{x}}(t_k)) > \bar{n}_g$ \textit{or} $n_c(\set{Z}'_{\vec{x}}(t_k)) > \bar{n}_c$}{
+    $\post{\set{Z}}_{\vec{x}}(t_{k})\gets\textrm{Reduction}\left({\set{Z}}'_{\vec{x}}(t_{k})\right)$
+  }\uElse{
+    $\post{\set{Z}}_{\vec{x}}(t_k) \gets \set{Z}'_{\vec{x}}(t_k)$
+  }
+    }
+    $k\gets k+1$\;
+    }
+
+  \caption{\small \czesmf}
+  \label{alg:czesmf_resume}
+\end{algorithm2e}
+}
+\end{frame}
+
+\section{Examples}
+
+\subsection{1D Example --- Platooning}
+
+\begin{frame}
+  \begin{figure}[b!]
+    \centering
+    %	\caption{1D example: state trajectory and enclosures.}	\label{fig:mn1_trajectory}
+    % \begin{subfigure}{\linewidth}
+    %  \centering
+    \includegraphics[width=.5\linewidth]{mn1_trajectory}
+
+    \includegraphics[width=.2\linewidth]{mn1_p}
+    % \caption{}
+    % \label{fig:mn1_p}
+    % \end{subfigure}
+    % \begin{subfigure}{\linewidth}
+    %   \centering
+    \includegraphics[width=.2\linewidth]{mn1_v}
+
+    % \caption{}
+    % \label{fig:mn1_v}
+    % \end{subfigure}
+    \caption{\cz\ enclosures and position and velocity intervals.}
+    \label{fig:mn1_p_and_v}
+  \end{figure}
+\end{frame}
+\subsection{2D Example --- Vehicle tracking in urban traffic roads}
+
+% \begin{frame}{Parcours Académique}
+%   \only<2>{
+%     \begin{minipage}[c]{.7\linewidth}
+%       \begin{itemize}
+%         \item[] Techn. Électron. Analog. et Numérique --- CEFET-RJ\\ (2010--2013)
+%       \end{itemize}
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[c]{.2\linewidth}
+%       \centering
+%       \includegraphics[width=3cm]{logos/cefet.jpg}%
+%     \end{minipage}
+%   }
+%   \only<3>{
+%     \vspace{-1cm}
+%     \begin{minipage}[c]{.7\linewidth}
+%       \begin{itemize}
+%         \item[] B.Sc Ingérierie Automatique et Automatisation --- UFRJ\\ (2013--2019)
+%         \item[] Ing. Ingérierie de Systèmes Automatisés --- Supélec\\ (2016--2018)
+%         \item[] Master Recherche SISEA --- UR1/CS\\ (2017--2018)
+%       \end{itemize}
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[c]{.2\linewidth}
+%       \centering
+%       \includegraphics[width=3cm]{logos/poli-ufrj.png}%
+
+%       \includegraphics[width=3cm]{logos/supelec.jpeg}%
+
+%       \includegraphics[width=3cm]{logos/rennes1.png}%
+%     \end{minipage}
+%   }
+
+%   \only<4>{
+%     \vspace{-1cm}
+%     \begin{minipage}[c]{.7\linewidth}
+%       \begin{itemize}
+%         \item[] Ph.D. Automatique, Robot., Produt. --- UR1/CS\\ (2019--2022)
+%       \end{itemize}
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[c]{.2\linewidth}
+%       \centering
+%       \includegraphics[width=3cm]{logos/supelec.jpeg}%
+
+%       \includegraphics[width=3cm]{logos/rennes1.png}%
+%     \end{minipage}
+%   }
+
+%   \begin{tikzpicture}[overlay, remember picture]
+%     \node[anchor=south] (image) at (current page.south) {\includegraphics<1>[width=\textwidth]{timeline_1-crop.pdf}};
+%     \node[anchor=south] (image) at (current page.south) {\includegraphics<2>[width=\textwidth]{timeline_2-crop.pdf}};
+%     \node[anchor=south] (image) at (current page.south) {\includegraphics<3>[width=\textwidth]{timeline_5-crop.pdf}};
+%     \node[anchor=south] (image) at (current page.south) {\includegraphics<4>[width=\textwidth]{timeline_6-crop.pdf}};
+%   \end{tikzpicture}
+% \end{frame}
+
+% \section{Recherche}
+
+% \begin{frame}{Expérience en Recherche}
+%   \begin{overlayarea}{\textwidth}{5cm}
+%   \only<2>{
+%     \begin{minipage}[c]{.75\linewidth}
+%       \begin{itemize}
+%         \item[] Init. à la Rech. --- LAPIS (Coppe/UFRJ) (2015--2016)
+%         \item[] \textit{Contrôle d'orthèses pour patients avec atrophie musc.}
+%         \item[] Supervisionné par C. J. Tierra Criollo
+%       \end{itemize}
+
+%       % \centering
+%       \begin{minipage}[c]{.2454\textwidth}
+%         \centering
+%         \includegraphics[width=.8\textwidth]{bras_prototype.jpg}%
+%       \end{minipage}
+%     \hfill
+%     \tikz\draw[{latex}-{latex}] (0,0) - +(.0818181\textwidth,0) node [midway,above,align=center] {};%
+%     \hfill
+%       \begin{minipage}[c]{.2454\textwidth}
+%         \centering
+%         \includegraphics[width=.7\textwidth]{arduino-UNO.png}%
+%       \end{minipage}
+%     \hfill
+%     \tikz\draw[{latex}-{latex}] (0,0) - +(.0818181\textwidth,0) node [midway,above,align=center] {};%
+%     \hfill
+%       \begin{minipage}[c]{.2454\textwidth}
+%         \centering
+%         \includegraphics[width=.7\textwidth]{Matlab_Logo}%
+%       \end{minipage}
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[c]{.2\linewidth}
+%       \centering
+%       \tikz\node[fill=auditionPrimary!90] (a) {\includegraphics[width=2.3cm]{logos/logo-coppe-50.png}
+%       };%
+
+%         \includegraphics[width=2.3cm]{LogoPEB.png}
+%     \end{minipage}
+%   }
+
+%     \only<3>{
+%       \begin{minipage}[c]{.7\linewidth}
+%         \begin{itemize}
+%           \item[] Stage 2A --- AUTO IETR (2017--2017)
+%           \item[] \textit{Contrôle d'un réseau de distribution d'électricité}
+%           \item[] Supervisionné par Hervé Guéguen
+%         \end{itemize}
+
+
+%         \begin{minipage}[c]{.2454\textwidth}
+%           \centering
+%           \includegraphics[width=1\textwidth]{reseau_dist.pdf}
+%         \end{minipage}%
+%         \hfill
+%         \tikz\draw[-{latex}] (0,0) - +(.0818181\textwidth,0) node [midway,above,align=center] {};%
+%         \hfill
+%         \begin{minipage}[c]{.2454\textwidth}
+%           \centering
+%           $Q(U)$\\
+
+%           \includegraphics[width=1.0\textwidth]{regulateur.pdf}
+%         \end{minipage}
+%         \hfill
+%         \tikz\draw[-{latex}] (0,0) - +(.0818181\textwidth,0) node [midway,above,align=center] {};%
+%         \hfill
+%         \begin{minipage}[c]{.2454\textwidth}
+%           \centering
+%           \includegraphics[width=1\textwidth]{controle_tension_distribution_network.pdf}
+%         \end{minipage}
+
+%       \end{minipage}
+%       \hfill
+%       \begin{minipage}[c]{.2\linewidth}
+%         \centering
+%         \includegraphics[width=3cm]{logos/IETR_2022.png}%
+%       \end{minipage}
+%     }
+%     \only<4>{
+%       % \vspace{-1cm}
+%       \begin{minipage}[c]{.7\linewidth}
+%         \begin{itemize}
+%           \item[] Stage 3A --- Renault (2018--2018)
+%           \item[] \textit{Superviseur pour véhicule autonome}
+%           \item[] Supervisionné par F. Shokry
+%         \end{itemize}
+
+%         \vspace{.5cm}
+%         \centering
+%         \begin{minipage}[c]{.2454\textwidth}
+%           \centering
+%           \includegraphics[width=1.0\textwidth]{stateflow.png}
+%         \end{minipage}%
+%         \hfill
+%         \tikz\draw[-{latex}] (0,0) - +(.0818181\textwidth,0) node [midway,above,align=center] {};%
+%         \hfill
+%         \begin{minipage}[c]{.2454\textwidth}
+%           \centering
+%           \includegraphics[width=1\textwidth]{microAutoBox.jpeg}
+%         \end{minipage}
+%         \hfill
+%         \tikz\draw[-{latex}] (0,0) - +(.0818181\textwidth,0) node [midway,above,align=center] {};%
+%         \hfill
+%         \begin{minipage}[c]{.2454\textwidth}
+%           \centering
+%           \includegraphics[width=1\textwidth]{zoe.png}
+%         \end{minipage}
+%       \end{minipage}
+%       \hfill
+%       \begin{minipage}[c]{.2\linewidth}
+%         \centering
+%         \includegraphics[width=2cm]{logos/renault.jpg}%
+
+%       \end{minipage}
+%     }
+
+%   \only<5>{
+%     \begin{minipage}[c]{.7\linewidth}
+%       \begin{itemize}
+%         \item[] Recherche B.Sc --- LCA (Coppe/UFRJ) (2019--2019)
+%         \item[] \textit{Identif. des syst. industriels pour la détection de failles}
+%         \item[] Supervisionné par M. V. de Brito Moreira
+%       \end{itemize}
+%       \centering
+%       \begin{minipage}[c]{.4\textwidth}
+%         \centering
+%         \includegraphics[width=.3\textwidth]{maquete/mag.jpg}
+%         \includegraphics[width=.3\textwidth]{maquete/esteira.jpg}
+%         \includegraphics[width=.3\textwidth]{maquete/sensores.jpg}
+
+%         \includegraphics[width=.3\textwidth]{automates/plc_cropped.jpg}
+
+%         \includegraphics[width=.3\textwidth]{maquete/braco.jpg}
+%         \includegraphics[width=.3\textwidth]{maquete/prensa.jpg}
+%         \includegraphics[width=.3\textwidth]{maquete/elevador.jpg}
+%       \end{minipage}
+%       \resizebox{.1\textwidth}{!}{\tikz\draw[->] (0,0) - +(2,0) node [midway,above,align=center] {I/O\\ +\\ DAOCT};}
+%       \begin{minipage}[c]{.4\textwidth}
+%         \includegraphics[width=\textwidth]{maquete/example.pdf}
+%       \end{minipage}
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[c]{.2\linewidth}
+%       \centering
+%       \tikz\node[fill=auditionPrimary!90] (a) {\includegraphics[width=2.3cm]{logos/logo-coppe-50.png}};%
+
+
+%       \includegraphics[width=2.3cm]{LogoLCA.png}
+%     \end{minipage}
+%   }
+
+%     \only<6>{
+%       \begin{minipage}[c]{.7\linewidth}
+%         \begin{itemize}
+%           \item[] Ph.D  --- AUTO IETR (2019--2022)
+%           \item[] \textit{Sécurité de la dMPC contre injection de données}
+%           \item[] Supervisionné par H. Guéguen et R. Bourdais
+%         \end{itemize}
+
+%         \centering
+%         \includegraphics[width=5cm]{Non-coop_Agent_1.png}%
+%       \end{minipage}
+%       \hfill
+%       \begin{minipage}[c]{.2\linewidth}
+%         \centering
+%         \includegraphics[width=3cm]{logos/IETR_2022.png}%
+%       \end{minipage}
+%     }
+
+%     \only<7>{
+%       % \vspace{-1cm}
+%       \begin{minipage}[c]{.7\linewidth}
+%         \begin{itemize}
+%           \item[] Post-doc --- LAAS/CNRS (2023--2024)
+%           \item[] \textit{Localisation garantie de véhicules autonomes pour scénarios anti-collision}
+%           \item[] Supervisionné par Soheib Fergani (DISCO)
+%         \end{itemize}
+
+%         \centering
+%         % \vspace{1cm}
+%         \scalebox{3}{
+%           \begin{tikzpicture}
+%             % \draw [help lines] (-1,-1) grid [step=.1cm] (1,1);
+%             \node[] (car_purple_position) {};
+
+%             % constrained zonotope
+%             \draw[neocampus_yellow,fill=neocampus_yellow] (-0.65,-0.1) -- ++(90:0.2) -- ++(45:0.42) --++(0:0.4) -- ++(-30:0.53) -- ++(-90:0.32) -- ++(210:0.28) --++(180:0.45) --++(160:0.49) -- cycle;
+
+%             \path[draw,use Hobby shortcut,closed=true,violet!50!white]
+%             % \path[draw,use Hobby shortcut,closed=true,violet!50!white,fill=violet!50!white,opacity=0.5]
+%             ($(car_purple_position)+(.5,0)$) .. ++(-.3,.3) .. ++(-.1,.05) .. ++(-0.6,-0.1) ..++(-0.1,-0.4) ..++(0.2,-0.1);
+%             \node[] (car_purple) at (car_purple_position) {\includegraphics[height=1cm,angle=90]{car_purple}};
+
+%           \end{tikzpicture}
+%         }
+%       \end{minipage}
+%       \hfill
+%       \begin{minipage}[c]{.2\linewidth}
+%         \centering
+%         \includegraphics[width=3cm]{logos/laas.png}%
+
+%         % \includegraphics[width=3cm]{bras_prototype.jpg}%
+%       \end{minipage}
+%     }
+
+%   \only<8>{
+%     \begin{minipage}[c]{.7\linewidth}
+%       \begin{itemize}
+%         \item[] Ingénieur de Recherche --- LAAS/CNRS (2024--2024)
+%         \item[] \textit{Ontologies + langage naturel + raisonnement spatial}
+%         \item[] Supervisionné par Aurélie Clodic (RIS)
+%       \end{itemize}
+
+
+%       \centering
+%       % \vspace{1cm}
+%       \resizebox{!}{1.7cm}{
+%       \begin{minipage}[c]{.2\linewidth}
+%         \centering
+%         \includegraphics[width=.8\textwidth]{Ros_logo.png}%
+
+%         \includegraphics[width=.5\textwidth]{overworld.png}%
+
+%         \small LLaMIPa
+%       \end{minipage}
+%     % \hfill
+%     \tikz\draw[{latex}-{latex}] (0,0) - +(.05\textwidth,0) node [midway,above,align=center] {};%
+%     % \hfill
+%       \begin{minipage}[c]{.2\linewidth}
+%         \centering
+%         \includegraphics[width=.8\textwidth]{Steve_Alex.jpg}%
+%       \end{minipage}
+%     % \hfill
+%     \tikz\draw[-{latex}] (0,0) - +(.05\textwidth,0) node [midway,above,align=center] {};%
+%     % \hfill
+%       \begin{minipage}[c]{.2\linewidth}
+%         \centering
+%         \includegraphics[width=.8\textwidth]{blocks.png}%
+%       \end{minipage}
+%     }
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[c]{.2\linewidth}
+%       \centering
+%       \includegraphics[width=3cm]{logos/laas.png}%
+
+%     \end{minipage}
+%   }
+
+
+%     \only<9>{
+%       \hspace{-1cm}\begin{minipage}[c]{.8\linewidth}
+%         \begin{itemize}
+%           \item[] Chargé d'Enseignement --- IMT Atlantique/LS2N (2024--2025)
+%           \item[] \textit{Caractérisation thermique de bâtiments pour détection/prévention des épisodes de coups de chaleur.}
+%           \item[] Supervisionné par Philippe Chevrel (CODEx)
+%         \end{itemize}
+
+%         % \begin{minipage}[c]{.2\linewidth}
+%         \centering
+%         \begin{tikzpicture}
+%           \node at (-2,0) {\includegraphics[height=.15\paperheight]{energy/wind.pdf}};
+%           \node at (0,0) {\includegraphics[height=.3\paperheight]{energy/Cube_250_model.pdf}};
+%           \node at (2,1) {\includegraphics[height=.1\paperheight]{energy/sun.pdf}};
+%         \end{tikzpicture}
+%         % \end{minipage}
+
+%       \end{minipage}
+%       \begin{minipage}[c]{.1\linewidth}
+%         \centering
+%         \includegraphics[width=3cm]{logos/LogoLS2Nbis.pdf}%
+%       \end{minipage}
+%     }
+%     \only<10>{
+% \definecolor{LAPIS}{RGB}{218, 126, 119}
+% \definecolor{IETR}{RGB}{219, 152, 108}
+% \definecolor{IMTA}{RGB}{222, 200, 134}
+% \definecolor{AUT}{RGB}{217, 222, 158}
+% \definecolor{LCA}{RGB}{156, 213, 163}
+% \definecolor{RIS}{RGB}{186, 214, 222}
+% \definecolor{DISCO}{RGB}{197, 177, 215}
+% \definecolor{RENAULT}{RGB}{182, 164, 222}
+
+%       \vspace{-.5cm}
+%       \centering
+%       \resizebox*{!}{0.7\paperheight}{
+%         \begin{tikzpicture}[root concept/.style={concept color=auditionPrimary!60,minimum size=2.5cm,font=\small,color=white},level 1 concept/.append style={level distance=3.5cm,font=\scriptsize},mindmap]
+%           \node [concept,minimum width=1cm,inner sep=0pt] {Applications}
+%           [clockwise from=0]
+%           child[concept, color=black, concept color=LAPIS, grow=51]  { node [concept,minimum size=2.2cm] {Ingénierie Biomédicale}}
+%           child[concept, color=black, concept color=IETR, grow=96] { node [concept,minimum size=2.2cm] {Transport\\ d'Électricité}}
+%           child[concept, color=black, concept color=DISCO, grow=141] { node [concept,minimum size=2.2cm] {Robotique\\ Mobile}}
+%           child[concept, color=black, concept color=LCA, grow=186] { node [concept,minimum size=2.2cm] {Automatismes\\ Industriels}}
+%           child[concept, color=black, concept color=AUT, grow=231] { node [concept,minimum size=2.2cm] {Bâtiment\\ Intelligent}}
+%           child[concept, color=black, concept color=RENAULT, grow=276] { node [concept,minimum size=2.2cm] {Véhicule\\ Autonome}}
+%           child[concept, color=black, concept color=RIS, grow=321] { node [concept,minimum size=2.2cm] {Robotique\\ Intéractions}}
+%           child[concept, color=black, concept color=IMTA, grow=366] { node [concept,minimum size=2.2cm] {Gestion Thermique}}
+%           ;
+%           % \node [annotation,right] at (root.east) {The root concept};
+%         \end{tikzpicture}
+%       }
+%     }
+
+%   \end{overlayarea}
+
+%     \begin{tikzpicture}[overlay, remember picture]
+%     \node[anchor=south] (image) at (current page.south) {\includegraphics<1>[width=\textwidth]{research_timeline_1-crop.pdf}};
+%     \node[anchor=south] (image) at (current page.south) {\includegraphics<2>[width=\textwidth]{research_timeline_2-crop.pdf}};
+%     \node[anchor=south] (image) at (current page.south) {\includegraphics<3>[width=\textwidth]{research_timeline_3-crop.pdf}};
+%     \node[anchor=south] (image) at (current page.south) {\includegraphics<4>[width=\textwidth]{research_timeline_4-crop.pdf}};
+%     \node[anchor=south] (image) at (current page.south) {\includegraphics<5>[width=\textwidth]{research_timeline_5-crop.pdf}};
+%     \node[anchor=south] (image) at (current page.south) {\includegraphics<6>[width=\textwidth]{research_timeline_6-crop.pdf}};
+%     \node[anchor=south] (image) at (current page.south) {\includegraphics<7>[width=\textwidth]{research_timeline_7-crop.pdf}};
+%     \node[anchor=south] (image) at (current page.south) {\includegraphics<8>[width=\textwidth]{research_timeline_8-crop.pdf}};
+%     \node[anchor=south] (image) at (current page.south) {\includegraphics<9->[width=\textwidth]{research_timeline_9-crop.pdf}};
+%   \end{tikzpicture}
+% \end{frame}
+
+% \begin{frame}{Portrait de la thèse}
+%   \hypertarget{thesis}{}
+%   \centering
+%   \begin{minipage}{.7\textwidth}
+%     \begin{overlayarea}{\textwidth}{4cm}
+%       \begin{itemize}[<+->]
+%         \item[\hyperlink{thesis_appendix}{\beamergotobutton{plus}}] Commande Prédictive distribuée (CPd) sur attaques
+%               \begin{itemize}
+%                 \item<.-> multi-agents + données faussées
+%               \end{itemize}
+%               % \item Analyse \tikzmarktext{sans_node}{sans} attaques $\to$ Paramètres \tikzmarktext{in_node}{in}\!variants
+%               % \only<3->{\tikz[overlay,remember picture] \draw[alert] (sans_node.south west) -- (sans_node.north east) (sans_node.north west) -- (sans_node.south east) node[midway,above=2pt,text=alert]{avec};}
+%               % \only<3->{\tikz[overlay,remember picture] \draw[alert] (in_node.south west) -- (in_node.north east) (in_node.north west) -- (in_node.south east);}
+%         \item[{\color{lockyellow} \faLightbulb }] Identification de Systèmes $\to$ Détection/mitigation%
+%               \begin{itemize}[<+->]
+%                 \item Contraintes d'égalité\footnotemark $\to$ SLIT
+%                       \begin{itemize}[<.->]
+%                         \item Moindres carrés
+%                       \end{itemize}
+%                 \item Contraintes d'inégalité $\to$ \textbf{système à commutation}
+%                       \begin{itemize}[<.->]
+%                         \item l'identification de systèmes PWARX\footnotemark\\ \onslide<+->{(généralisation?\footnotemark)}%
+%                       \end{itemize}
+%               \end{itemize}
+%       \end{itemize}
+%     \end{overlayarea}
+%   \end{minipage}
+%   \begin{minipage}{.25\textwidth}
+%     \includegraphics[width=1.5\textwidth]{Non-coop_Agent_1.png}
+%   \end{minipage}
+%   \addtocounter{footnote}{-2}
+%   \footnotetext<3->{\cite{NogueiraEtAl2021}}	\addtocounter{footnote}{1}
+%   \footnotetext<4->{\cite{NogueiraEtAl2022}}\addtocounter{footnote}{1}
+%   \footnotetext<5->{Articles en préparation.}
+% \end{frame}
+
+% \AtEndEnvironment{document}{
+%   \begin{frame}{Thesis \hyperlink{thesis}{\beamerreturnbutton{retour}}}{Contributions}
+%     \hypertarget{thesis_appendix}{}
+%     \begin{minipage}{.6\textwidth}
+%       \begin{overlayarea}{\textwidth}{4cm}
+
+%         \begin{itemize}[<+->]
+%           \item State of the art on \textit{security of dMPC}
+%           \item Vulnerability in inter-agent communication
+%           \item Mitigation through \textit{parameter estimation}
+%           \item Resource scarcity $\to$ assess behavior
+%           \item Identif. depends on local problems
+%                 \begin{itemize}[<+->]
+%                   \item Affine solutions\footnotemark (ok)
+%                   \item Piece-wise affine solutions\footnotemark (not much)
+%                         \begin{itemize}[<+->]
+%                           \item Combinatorial Explosion\footnotemark
+%                         \end{itemize}
+%                 \end{itemize}
+%         \end{itemize}
+%       \end{overlayarea}
+%     \end{minipage}
+%     \only<5->{\hspace{1cm}}
+%     \begin{minipage}{.3\textwidth}
+%       \only<1>{\includegraphics[width=7cm]{Non-coop_Agent_1.png}}
+
+%       \only<4>{
+%         \scalebox{.7}{
+%           \begin{tikzpicture}[every node/.style={align=center}]
+%             \def\height{3}
+%             \def\length{5}
+%             \node at (0,0) {} coordinate (p0)  ++(0:\length*2.2/5) coordinate (p1) ;
+%             \node at (0,0) {} ++(90:\height*2.8/5) coordinate (p2) ;
+
+%             \draw[black] (p2) ++(-4:5) coordinate (p3);
+%             \draw[black] (p1) ++(75:3) coordinate (p4);
+%             \coordinate (p6) at (p3|-p4);
+%             \coordinate (p5) at (intersection cs:first line={(p2)--(p3)}, second line={(p1)--(p4)});
+
+%             % \onslide\path[fill=gray!20] (p6) -- (p4) -- (p5) -- (p3);
+
+%             \onslide\path[fill=gray!20] (p1) -- (0,0) -- (p2) -- (p5);
+
+%             \only<2->{
+%               \draw[black] (p2) -- (p3);
+%               \draw[black] (p1) -- (p4);
+%             }
+
+%             \draw[-latex] (0,-.1) - - (0,\height) node[above,rotate=90]{Resource 1};
+%             \draw[-latex] (-.1,0) - - (\length,0) node[below,align=center]{Resource 2};
+
+%             \draw[latex-] (-1,-.1) - - +(0,\height+.1) node[midway,rotate=90,anchor=center,yshift=.25cm]{Scarcity};
+%             \draw[latex-] (-.1,-.6) - - +(\length+.1,0) node[midway,below]{Scarcity};
+
+%             \only{\node at (\length*1.2/5,\height*1.25/5) {$\elem[1]{\lambdai}\neq0$\\$\elem[2]{\lambdai}\neq0$};}
+%             \only{\node at (\length*1.2/5,\height*3.8/5) {$\elem[1]{\lambdai}=0$\\$\elem[2]{\lambdai}\neq0$};}
+%             \only{\node at (\length*4/5,\height*1.25/5) {$\elem[1]{\lambdai}\neq0$\\$\elem[2]{\lambdai}=0$};}
+%             \only{\node at (\length*4/5,\height*3.8/5) {$\elem[1]{\lambdai}=0$\\$\elem[2]{\lambdai}=0$};}
+
+%           \end{tikzpicture}
+%         }
+%       }
+%       \only<6->{
+
+%         \begin{overlayarea}{\textwidth}{3cm}
+%           \centering
+%           \scalebox{.75}{
+%             % \begin{equation*}
+%             $\lambdaik=-\Plin\thetaik-\sik$
+%             % \end{equation*}
+%           }
+
+%           \only<7->{
+%             \vspace{.25cm}
+%             \tikz\draw[->] (0,0) -- +(0,-1);
+
+%             \vspace{.25cm}
+%             \scalebox{.75}{
+%               % \begin{equation*}
+%               $
+%               \small
+%               \hspace{-2cm}
+%               \begin{aligned}
+%                 \lambdaik=
+%                 \begin{cases}
+%                   {-\Plinineq\thetaik-\sikineq},&\text{if}\ \thetaik \in{\set{R}_{\lambdai}^{0}}\\
+%                   \qquad\quad \vdots&\qquad\quad \vdots\\
+%                   -\Plinineq[i][Z]\thetaik-\sikineq[i][Z],&\text{if}\ \thetaik \in{\set{R}_{\lambdai}^{Z}}\\
+%                 \end{cases}
+%               \end{aligned}
+%               $
+%               % \end{equation*}
+%             }
+%           }
+%         \end{overlayarea}
+%       }
+%     \end{minipage}
+%     \addtocounter{footnote}{-2}
+%     \footnotetext<6->{\cite{NogueiraEtAl2021}}	\addtocounter{footnote}{1}
+%     \footnotetext<7->{\cite{NogueiraEtAl2022}}\addtocounter{footnote}{1}
+%     \footnotetext<8->{Journal article in the works (Performance and generalization)}
+%   \end{frame}
+% }
+
+% \begin{frame}{Portrait post-doc LAAS}
+%   \hypertarget<4->{postdoc}{}
+%   \begin{minipage}{.6\textwidth}
+%     \begin{overlayarea}{\textwidth}{4cm}
+%       \begin{itemize}[<+->]
+%         \item Plateforme \autOCampus:
+%               \begin{itemize}[<+->]
+%                 \item<.-> localisation relative garantie
+%                 \item tests avec \textbf{droïdes livreurs}\footnotemark\tikzmark{droids}
+%               \end{itemize}
+%         \item[\hyperlink{ensembles_garantis}{\beamergotobutton{plus}}] Algorithme d'estimation d'ensembles garantis\footnotemark
+%         \item Développement d'un \textbf{démonstrateur}\tikzmark{demo}
+%         \item Améliorations du filtre\footnotemark\
+%               \begin{itemize}[<.(1)->]
+%                 \item Implémentation en C++ et intégration ROS
+%                 \item Capteurs incertains (asynchrones)
+%                 \item Analyse d'atteignabilité pour réduire volumes
+%               \end{itemize}
+%       \end{itemize}
+
+%     \end{overlayarea}
+%   \end{minipage}
+%   \hspace{1cm}
+%   \begin{minipage}{.3\textwidth}
+%     \centering
+%     \scalebox{0.75}{
+%       \begin{tikzpicture}
+%         \node[alt=<{3-}>{opacity=0.2}] (0,0) {\includegraphics[width=4.5cm]{crossroad.png}};
+
+%         \node (car_red) at (0.25,-1) {\includegraphics[height=.75cm]{car_red}};
+
+%         \node[above right=.9cm of car_red] (car_purple_position) {};
+%         \onslide<3->{
+%           \path[draw,use Hobby shortcut,closed=true,violet!50!white,fill=violet!50!white,opacity=0.75]
+%           ($(car_purple_position)+(.5,0)$) .. ++(-.3,.3) .. ++(-.1,.05) .. ++(-0.6,-0.1) ..++(-0.1,-0.4) ..++(0.2,-0.1);
+%         }
+%         \node[] (car_purple) at (car_purple_position) {\includegraphics[height=.75cm,angle=90]{car_purple}};
+
+%         \node[above left=-.2cm and 1cm of car_purple] (car_brown_position) {};
+%         \onslide<3->{
+%           \path[draw,use Hobby shortcut,closed=true,olive!50!white,fill=olive!50!white,opacity=0.75]
+%           ($(car_brown_position)+(.2,-.5)$) .. ++(.1,.5) .. ++(-.04,.4) .. ++(-0.5,-0.3);}
+%         \node (car_brown) at (car_brown_position) {\includegraphics[height=.75cm]{car_brown}};
+%       \end{tikzpicture}
+%     }
+%     \onslide<4->{
+%       \vspace{.25cm}
+
+%       \begin{tikzpicture}[remember picture]
+%         \clip[] (0,0) circle (1.5cm);
+%         \node[inner sep=0.cm] (qbot) {\includegraphics[angle=-90,width=3cm]{qbot3}};
+%       \end{tikzpicture}
+%     }
+
+%   \end{minipage}
+%   \onslide<2->{\begin{tikzpicture}[overlay, remember picture]
+%       \draw[->,decorate,thick] (droids.east) to[out=0,in=90,] ++(1,1) node[above right,text=black,align=center,inner sep=0cm] {\includegraphics[width=0.2\textwidth]{twinswheel.png}};
+%     \end{tikzpicture}}
+%   \onslide<4->{\begin{tikzpicture}[overlay, remember picture]
+%       \draw[->,decorate,thick] (demo.east) to[out=0,in=135,] ($(qbot.center) + (-.75*1.4-0.1,.75*1.4+0.1)$);
+%     \end{tikzpicture}}
+% 	\addtocounter{footnote}{-2}
+%   \footnotetext<2->{Collaboration avec équipe RAP du LAAS/CNRS, IRIT et Soben.} \addtocounter{footnote}{1}
+%   \footnotetext<3->{Collaboration avec la SATT Toulouse Tech Transfer.}	\addtocounter{footnote}{1}
+%   \footnotetext<5->{Article de conférence soumis et de journal en préparation.}
+% \end{frame}
+
+% \AtEndEnvironment{document}{
+%   \begin{frame}{Approximation par ensembles connus \hyperlink{postdoc}{\beamerreturnbutton{retour}}}
+%     \hypertarget{ensembles_garantis}{}
+%     \centering
+%     \begin{overlayarea}{\textwidth}{.25\paperheight}
+%       \begin{itemize}
+%         \item<+(1)-> Compromis entre complexité de calcul et conservatisme
+%               \begin{itemize}
+%                 \item<+(1)-> Rapide mais conservative: {\color<3>{green!50!white}{intervalles}}, {\color<4>{blue!50!white}{ellipsoïdes}}, {\color<5>{olive!50!white}{zonotopes}}
+%                 \item<+(3)-> Lent mais serré (normalement hors-ligne): \alert<6>{sous-pavage (SIVIA)}, {\color<7>{neocampus_yellow}{polytopes}}
+%               \end{itemize}
+%         \item<+(4)-> Zonotope Contraint\only<.(4)->{\footnote{\cite{ScottEtAl2016} (\citeyear{ScottEtAl2016})} }(une autre representation de polytopes)
+%       \end{itemize}
+%     \end{overlayarea}
+
+%     \vfill
+%     \begin{overlayarea}{\textwidth}{.3\paperheight}
+%       \begin{minipage}[c]{.45\linewidth}
+%         \scalebox{3}{
+%           \begin{tikzpicture}
+%             % \draw [help lines] (-1,-1) grid [step=.1cm] (1,1);
+%             \node[] (car_purple_position) {};
+
+%             % interval
+%             \onslide<3->{
+%               \draw[green!50!white,fill=green!50!white,alt=<4->{opacity=0.2}] (-0.65,-0.33) rectangle ++(1.15,.73);
+%             }
+
+%             % ellipse
+%             \onslide<4->{
+%               \draw[rotate=20,blue!50!white,fill=blue!50!white,alt=<5->{opacity=0.2}] ($(car_purple_position)+(-0.075,0)$) ellipse (.7cm and .44cm);
+%             }
+
+%             % zonotope
+%             \onslide<5->{
+%               \def\s{0.42}
+%               \def\a{0.88}
+%               \draw[olive!50!white,fill=olive!50!white,xshift=-0.71cm,yshift=0.04cm,alt=<6->{opacity=0.2}] (0,0) -- ++(60:\s) -- ++(0:\a) --++(-60:\s) -- ++(240:\s) --++(180:\a) -- ++(120:\s);
+%             }
+
+%             % constrained zonotope/ polytope
+%             \onslide<7->{
+%               \draw[neocampus_yellow,fill=neocampus_yellow] (-0.65,-0.1) -- ++(90:0.2) -- ++(45:0.42) --++(0:0.4) -- ++(-30:0.53) -- ++(-90:0.32) -- ++(210:0.28) --++(180:0.45) --++(160:0.49) -- cycle;
+%             }
+
+%             \path[draw,use Hobby shortcut,closed=true,violet!50!white,fill=violet!50!white]
+%             ($(car_purple_position)+(.5,0)$) .. ++(-.3,.3) .. ++(-.1,.05) .. ++(-0.6,-0.1) ..++(-0.1,-0.4) ..++(0.2,-0.1);
+%             \node[] (car_purple) at (car_purple_position) {\includegraphics[height=1cm,angle=90]{car_purple}};
+
+%           \end{tikzpicture}
+%         }
+%       \end{minipage}
+%       \hfill
+%       \begin{minipage}[c]{.45\linewidth}
+%         \visible<6->{
+%           \includegraphics[clip,trim={2 1.5 0 0},width=.6\textwidth]{sivia}
+%         }
+%       \end{minipage}
+%     \end{overlayarea}
+%   \end{frame}
+
+% \begin{frame}{Zonotope contraint: \hyperlink{postdoc}{\beamerreturnbutton{retour}}}
+%   \vfill
+%     \centering
+%     \begin{itemize}
+%       \item Propriétés similaires au polytopes\\
+%             (Clos pour l'intersection et somme de Minkowski)
+%             \begin{itemize}[<+(1)->]
+%               \item[+] Répresentation facilite exécution des opérations
+%               \item[+] Asymétrie $\to$ plus de liberté
+%               \item[+] Facilement appliquable pour des systèmes linéaires
+%               \item[-] Chaque opération augmente la complexité \\(réduction possible au détriment du volume)
+%             \end{itemize}
+%     \end{itemize}
+
+%     \begin{minipage}[c]{.45\linewidth}
+%       \centering
+%       \scalebox{3}{
+%         \begin{tikzpicture}
+%           % \draw [help lines] (-1,-1) grid [step=.1cm] (1,1);
+%           \node[] (car_purple_position) {};
+
+%           % constrained zonotope
+%           \draw[neocampus_yellow,fill=neocampus_yellow] (-0.65,-0.1) -- ++(90:0.2) -- ++(45:0.42) --++(0:0.4) -- ++(-30:0.53) -- ++(-90:0.32) -- ++(210:0.28) --++(180:0.45) --++(160:0.49) -- cycle;
+
+%           \path[draw,use Hobby shortcut,closed=true,violet!50!white]
+%           % \path[draw,use Hobby shortcut,closed=true,violet!50!white,fill=violet!50!white,opacity=0.5]
+%           ($(car_purple_position)+(.5,0)$) .. ++(-.3,.3) .. ++(-.1,.05) .. ++(-0.6,-0.1) ..++(-0.1,-0.4) ..++(0.2,-0.1);
+%           \node[] (car_purple) at (car_purple_position) {\includegraphics[height=1cm,angle=90]{car_purple}};
+
+%         \end{tikzpicture}
+%       }
+%       \[\set{C}_{\set{Z}}=\setbuild{G\vec{\xi}+\vec{c}}{\norm{\vec{\xi}}_{\infty}\leq 1,A\vec{\xi}=\vec{b}}\]
+%     \end{minipage}
+%   \end{frame}
+
+% }
+
+% \begin{frame}{Intégration en Recherche à l'équipe SDO}
+
+%   \vfill
+
+%   Fondé sur l'axe «Approches ensemblistes appliquées à la robotique et l'automatique» \pause avec coloration SFD.
+
+%   \pause
+%   \vfill
+%   Sécurité + Gestion d'incertitudes $\to$ \textbf{fiabilité} des systèmes et l'\textbf{aide à la décision}\pause
+%   \vfill
+%   2 axes \onslide<.(4)->{\hfil \tikz[baseline={(a.base)}] \node[fill=auditionPrimary!20,inner sep=0.2cm] (a) {Analyse/Diagnostic $\to$ Adaptation};}
+%   \vfill
+%     \begin{enumerate}[<+(1)->]
+%       \item Identification et estimation ensemblistes (Méthodologique)
+%       \item Commande basée diagnostic et applications (Applicatif)
+%     \end{enumerate}
+% \end{frame}
+
+
+
+% \begin{frame}{Intégration en Recherche}{Identification et estimation ensemblistes}
+
+%   Méthodes ensemblistes pour des problèmes inverses avec incertitudes
+
+%   \pause
+%   \vfill
+%   \begin{itemize}
+%     \item<+->[{\color{lockyellow} \faLock}] Diverses sources d'incertitudes
+%   \begin{itemize}
+%           \item dynamiques, environnement, multiagents etc
+%   \end{itemize}
+%     \item<+->[{\color{lockgreen} \faKey}] Cataloguer comportements/algorithmes d'estimation
+%   \begin{itemize}
+%           \item non-linéarités, retards, consensus etc
+%   \end{itemize}
+%   \end{itemize}
+
+%   \vfill
+%   \onslide<+->{Quelques pistes}
+%   \begin{itemize}[<.->]
+%     \item Incertitudes dans le transfert thermique du bâtiment (Travail en cours)\tikzmark{bat}
+%     \item[\articlesymbol] Attaques sur CPd\small~\citeauthor{NogueiraEtAl2021} \citeyear{NogueiraEtAl2021} (sans incertitudes)
+%     \item[\articlesymbol] Multiagents -- cartographie\small~\citeauthor{LucidarmeSimonin2015} \citeyear{LucidarmeSimonin2015}
+%   \end{itemize}
+%   \onslide<.->{
+%   \begin{tikzpicture}[overlay,remember picture]
+%     \node[anchor=north east] (error_temp) at ($(current page.north east) + (-0.5,-2.)$) {\includegraphics[width=3cm]{temp_estimated/uncertain_example.pdf}};
+%     \draw[-{Latex},black] (bat) to[out=0,in=270] (error_temp.south);
+%   \end{tikzpicture}
+%   }
+% \end{frame}
+
+
+% \begin{frame}{Intégration en Recherche}{Identification et estimation ensemblistes (cont.)}
+
+%   \vfill
+%   \medskip
+%   Estimation basée données/modèle.
+%   \vfill
+%   \pause
+%   \begin{itemize}
+%     \item<+->[{\color{lockyellow} \faLock}] Pas d'algorithme adéquats
+%     \item<+->[{\color{lockgreen} \faKey}] Dévéloppement/Adaptation des méthodes
+%   \end{itemize}
+
+%   \vfill
+%   \onslide<+->{Quelques pistes}
+%   \begin{itemize}[<.->]
+%           \setbeamertemplate{itemize item}{\articlesymbol}
+%     \item Identification PWARX\small~\citeauthor{Nogueira2022} \citeyear{Nogueira2022} (pas d'incertitudes)
+%     \item Méthodes de sous-espace ensemblistes\small~\citeauthor{PaulaEtAl2025} \citeyear{PaulaEtAl2025}
+%     \item Adapter l'interval SLAM pour autres ensembles\small~\citeauthor{MustafaEtAl2018} \citeyear{MustafaEtAl2018},
+%     \item Réseaux neuronaux adaptés --- PINN\small~\citeauthor{RaissiEtAl2019} \citeyear{RaissiEtAl2019}
+%   \end{itemize}
+% \end{frame}
+
+% \begin{frame}{Intégration en Recherche}{Commande basée diagnostic et applications}
+
+%   \vfill
+%   Théorie + pratique $\to$ développement d'outils
+
+%   \pause
+%   \vfill
+%   \begin{itemize}
+%     \item Ensembles + MPC (Travail en cours)\tikzmark{CP}
+%     \item[\articlesymbol] Ensembles + détection d'attaques~\small\citeauthor{KousikEtAl2023} \citeyear{KousikEtAl2023}
+%     \item Meute de robots mesureurs (Renov. énergétique)
+%     \item Ensembles + Optimisation (prise de décision)
+%   \end{itemize}
+
+%   \begin{tikzpicture}[overlay,remember picture]
+%     \node[anchor=north east] (images) at ($(current page.north east) + (-0.5,-0.5)$) {
+%       \includegraphics[width=1cm]{swarm_test/czs_k_1-crop.pdf}
+%       \includegraphics[width=1cm]{swarm_test/czs_k_2-crop.pdf}
+%       \includegraphics[width=1cm]{swarm_test/czs_k_3-crop.pdf}};
+
+%     \draw[-{Latex},black] ($(images)+ (-1.5,-.75)$) --+ (3,0) node [midway,below] {Temps};
+%     \draw[-{Latex},black] (CP) to[out=0,in=180] (images.west);
+%   \end{tikzpicture}
+
+%   \begin{itemize}
+%     \item<+(1)->[{\color{lockyellow} \faLock}] Logiciel embarquable (performance)
+%     \item<+(1)->[{\color{lockgreen} \faKey}] Optimisation des operations entre ensembles
+%     \item<+(1)->[{\color{lockyellow} \faLock}] Respect à la vie privé/sobriété numérique
+%     \item<+(1)->[{\color{lockgreen} \faKey}] Anonymisation des données\footnote<.(1)->{Compromis privacité/performance} + analyse de l'empreinte numérique des algorithmes
+%   \end{itemize}
+% \end{frame}
+
+% \begin{frame}{Intégration en Recherche}{Collaborations}
+%   \begin{itemize}
+%           \small
+%     \item DISCO (LAAS)
+%           \begin{itemize}
+%             \item Obs./diag./commande avec méthodes ensemblistes/systèmes hybrides
+%           \end{itemize}
+%     \item CODEx (LS2N)
+%           \begin{itemize}
+%             \item Incertitudes des systèmes multi-énérgies
+%             \item Réseaux neuronaux pour identification/commande
+%           \end{itemize}
+%     \item RIS (LAAS)
+%           \begin{itemize}
+%             \item Raisonnement géométrique pour planning
+%           \end{itemize}
+%     \item AUT (IETR)
+%           \begin{itemize}
+%             \item Incertitudes dans dimensionnement optimal de microréseaux
+%             \item Commande prédictive basée-données
+%           \end{itemize}
+%     \item LCA/LEAD (COPPE-UFRJ)
+%           \begin{itemize}
+%             \item Systèmes hybrides/Localisation sous-marine
+%             \item Pont axe «Systèmes à événements discrets»
+%           \end{itemize}
+%   \end{itemize}
+% \end{frame}
+
+% \begin{frame}{Intégration en Recherche}{Calendrier Prévisionnel}
+% \begin{itemize}
+% \item<1-> {Objectifs à Court terme (1 à 2 ans)}
+% \begin{itemize}
+%   \item<1-> Bibliothèque d'estimation ensembliste embarquable
+%         \begin{itemize}
+%           \item<1-> Appui SFR MathSTIC, SATT, Région, ANR JCJC,
+%         \end{itemize}
+%   \item<1-> Recherche de partenaires pour un possible consortium
+% \end{itemize}
+% \item<2-> Objectifs à moyen terme (3 à 5 ans)
+% \begin{itemize}
+%   \item<2-> Réseau de collaboration français sur méthodes ensemblistes
+%   \item<2-> Lancement projet ANR/ADEME
+%   \item<2-> Outil de diagnostic basé sur les incertitudes
+% \end{itemize}
+% \item<3-> Objectifs à long terme (+5 ans)
+% \begin{itemize}
+%   \item<3-> Réseau de collaboration brésilien/européen sur méthodes ensemblistes
+%   \item<3-> Projet Européen
+%   \item<3-> Outil pour l'aide à décision optimale avec méthodes ensemblistes
+% \end{itemize}
+% \end{itemize}
+
+% \end{frame}
+
+% \section{Enseignement}
+
+% \begin{frame}{Expérience en Enseignement \onslide<4>{>300h}}
+%   \vspace{1cm}
+%   \vfill
+%   \centering
+%   \resizebox*{!}{.8\paperheight}{
+%     \begin{minipage}[c]{.46\linewidth}
+%       \onslide<1->{
+%         \begin{block}{CentraleSupélec \hfill \raisebox{-5pt}{\includegraphics[height=.55cm]{logos/supelec.jpeg}}}
+%           \begin{itemize}
+%             \item[] Automatique (M1) TP
+%             \item[] Bâtiment Inteligent (M1) TP
+%             \item[] Commande Prédictive (M2) TP
+%             \item[] Optim. Micro réseaux (M1) Projet
+%           \end{itemize}
+%         \end{block}
+%       }
+%       \onslide<2->{
+%         \begin{block}{ECAM Rennes \hfill \raisebox{-5pt}{\includegraphics[height=.55cm,clip,trim={10 60 0 90}]{logos/logo_ecam_rennes.png}}}
+
+%           \begin{itemize}
+%             \item[] Espace d'états (M1) TP
+%             \item[] Automatique (M1) TP
+%           \end{itemize}
+%         \end{block}
+%       }
+%       \onslide<3->{
+%         \begin{block}{ENSEEIHT  \hfill \raisebox{-5pt}{\includegraphics[height=.55cm]{logos/logo_n7.jpg}}}
+%           \begin{itemize}
+%             \item[] MATLAB-Simulink (L3) TD+TP
+%             \item[] Programmation C (L3) BE
+%           \end{itemize}
+%         \end{block}
+%       }
+%     \end{minipage}
+%     \hspace{1cm}
+%     \begin{minipage}[c]{.51\linewidth}
+%       \onslide<4->{
+%         \begin{block}{IMT Atlantique \hfill \raisebox{-5pt}{\includegraphics[height=.55cm]{logos/logo_IMT_AtlantiqueRF}}}
+%           \begin{itemize}
+%             \item[] Analyse (L3) TD
+%             \item[] Signaux \& Systèmes (L3) CM+TD
+%             \item[] Projet monde en transition (L3)
+%             \item[] SA en E.E. (L3) BE
+%             \item[] Arch. Log. pour la robot. (M1/M2) TP
+%             \item[] Identif. et Estimat. (M1/M2) TP
+%             \item[] Projet Complexe (M1/M2)
+%             \item[] Protot. de syst. robot. (M1) Projet
+%           \end{itemize}
+%         \end{block}
+%       }
+%     \end{minipage}
+%   }
+% \end{frame}
+
+% \begin{frame}{Intégration en Enseignement}
+%   \hypertarget{enseignement}{}
+%   \vspace{0.5cm}
+%   \vfill
+%   \centering
+%   \resizebox*{!}{0.725\paperheight}{
+%     \begin{minipage}[c]{\linewidth}
+%       \onslide<1->{
+%         \begin{block}{SAGI - Systèmes Automatisés et Génie Informatique}
+%           Automatique,
+%           Automatique avancée,
+%           Automatismes industriels,
+%           Commande des procédés,
+%           Génie logiciel,
+%           Gestion de projets informatiques,
+%           \hbox{GNU/Linux},
+%           Informatique embarquée,
+%           Langage~C,
+%           Microcontrôleur,
+%           Modélisation et simulation en Python,
+%           Optimisation,
+%           \emph{Réseaux Industriels},
+%           Robotique Mobile,
+%           Temps réel,
+%           \structure{Algorithmique avancée et~complexité\footnotemark,
+%             Programmation C\#,
+%             Programmation JAVA,
+%             Robotique,
+%             Robotique industrielle,
+%             Simulation des systèmes~à~événements discrets.
+%           }
+%           \alert{Optimisation des grands systèmes\footnotemark} \onslide<2->{+ Challenge Industriel / Projets et compétitions}
+%         \end{block}
+%       }
+%       \onslide<3->{
+%         \begin{block}{PeiP}
+%           Automatique,
+%           Bases d’algèbre,
+%           Compléments d’algèbre,
+%           Bases d’analyse,
+%           Compléments d’analyse,
+%           Calcul Numérique,
+%           Capteurs,
+%           Culture numérique,
+%           \structure{Électronique numérique,}
+%           Éléments d’électricité,
+%           Langage~C,
+%           Mathématiques du signal,
+%         \end{block}
+%       }
+%       \onslide<4->{
+%         \begin{block}{Master Parcours SDS - Système dynamique et signaux}
+%           Automatique,
+%           \structure{Commande des Procédés,}
+%           Méthodologie de la Recherche,
+%           \structure{Robotique~/~Analyse par intervalles,}
+%           \alert{Optimisation des grands systèmes}
+%         \end{block}
+%       }
+%     \end{minipage}
+%     }
+%     \addtocounter{footnote}{-1}
+%     \footnotetext{\structure{En bleu:} dans un 2$^{\text{nd}}$ temps}
+%     \addtocounter{footnote}{1}
+%     \footnotetext{\alert{En rouge:} proposition de cours}
+
+% \end{frame}
+
+% \section{Conclusion}
+
+% \begin{frame}{Conclusion}
+%   \begin{itemize}
+%     \item<+-> Ouvert à des nouvelles applications
+%     \item<+-> Focus dans la pratique $\to$ validation
+%     % \item<+-> Collaborations grace à l'attractivité de la région
+%     \item<+-> Diagnostic/Sécurité est essentiel pour la fiabilité des systèmes
+%     \item<+-> Ouvert à des nouvelles méthodes pédagogiques
+%     \item<+-> Mes expériences peuvent contribuer à la formation Polytech
+%   \end{itemize}
+% \end{frame}
+
+% % https://www.francecompetences.fr/recherche/rncp/35702/
+
+% \part{Pédagique}
+% \begin{frame}[plain]
+%   \title{Industrial Networks\\ UE 7-3 Automatique \& Automatisation}
+%   \subtitle{Introduction}
+%   \author{Rafael Accácio Nogueira\\ Polytech Angers}
+%   \date{Semester 7 --- 4$^\text{th}$ year \\SAGI}
+%   \titlepage%
+% \end{frame}
+
+% \begin{frame}{Industrial Networks  }{Course Information}
+%   \begin{itemize}
+%     \item Objective
+%           \begin{itemize}
+%             \item Identify, analyse and configure industrial network topologies
+%             \item Configure PLCs to work together using common protocols
+%           \end{itemize}
+%           \vfill
+%     \item Prerequisites
+%           \begin{itemize}
+%             \item Python (UE 1-2/2-2)
+%             \item Industrial Automation (UE 5-2)
+%             \item Notions of GRAFCET/Control Interpreted Petri Nets
+%             \item Notions of graph theory
+%           \end{itemize}
+%   \end{itemize}
+% \end{frame}
+
+% \begin{frame}{Industrial Networks}{Course Information (bis)}
+
+%   \vfill
+%   \begin{itemize}
+%     \item Session\footnote{Slides and optional references on moodle}
+%           % \renewcommand{\descriptionlabel}[1]{\hspace{\labelsep}\textit{#1}}
+%           \begin{description}
+%             \item[Lecture]   \phantom{2}6h
+%             \item[Practical] 26h
+%           \end{description}
+%   \end{itemize}
+%   \vfill
+%   \begin{minipage}{0.45\linewidth}
+%     Outline
+%     \begin{enumerate}
+%       \item Network and communication\footnotemark
+%       \item Synchronization
+%       \item Modbus
+%       \item CAN
+%       \item Profibus
+%     \end{enumerate}
+%   \end{minipage}
+%   \hfill
+%   \begin{minipage}{0.5\linewidth}
+%     Developed/evaluated competences
+%     \begin{description}
+%       \item[S.1] Control industrial processes
+%       \item[C.1] implement scientific knowledges and techiques
+%     \end{description}
+
+%     Grading:
+
+%     Written exam + Practical work reports
+%   \end{minipage}
+%   \footnotetext{Context and categories by size, transmission direction, channel, serial/parallel, synchrony}
+% \end{frame}
+
+% \begin{frame}{Context}
+
+%   \vfill
+%   \centering
+%   \newcommand{\beltSensor}[3]{
+%     \draw[very thick] (####1-0.125,####2) rectangle ++ (0.25,.5);
+%     \draw[dashed,very thick] (####1,####2) -- (####1,2);
+%     \draw (####1,####2+1.5) node {####3};
+%   }
+%   \newcommand{\beltBox}[3]{
+%     \draw[very thick] (####1,####2) rectangle ++ (####3,####3);
+%     \draw[very thick] (####1,####2) -- ++ (####3,####3);
+%     \draw[very thick] (####1,####2+####3) -- ++ (####3,-####3);
+%   }
+
+%   \only<1-6>{
+%     \resizebox{.7\textwidth}{!}{
+%       \begin{tikzpicture}
+%         \tikzset{/robotarm/geometry={a=1,r=0.2}}
+%         \onslide<2-3>{\begin{scope}[xshift=-1cm,yshift=1.5cm]
+%             \robotArm[draw annotations=false,styles={link/.style={draw=black,thick,fill=none}},config={q1=120,q2=-40,q3=-90}]{3}
+%           \end{scope}}
+
+%         \onslide<4>{\begin{scope}[xshift=-1cm,yshift=1.5cm]
+%             \robotArm[draw annotations=false,styles={link/.style={draw=black,thick,fill=none}},config={q1=100,q2=-50,q3=-90}]{3}
+%           \end{scope}}
+
+%         \onslide<5>{\begin{scope}[xshift=-1cm,yshift=1.5cm]
+%             \robotArm[draw annotations=false,styles={link/.style={draw=black,thick,fill=none}},config={q1=100,q2=-70,q3=-50}]{3}
+%           \end{scope}}
+
+%         \onslide<6>{\begin{scope}[xshift=-1cm,yshift=1.5cm]
+%             \robotArm[draw annotations=false,styles={link/.style={draw=black,thick,fill=none}},config={q1=60,q2=-60,q3=-0}]{3}
+%           \end{scope}}
+
+%         % Belt
+%         \draw[very thick] (1,1) -- (9,1);
+%         \draw[very thick] (1,2) -- (9,2);
+%         \draw[very thick] (1,1.5) circle(0.5);
+%         \draw[thick,fill] (1,1.5) circle(0.05);
+%         \draw[very thick] (9,1.5) circle(0.5);
+%         \draw[thick,fill] (9,1.5) circle(0.05);
+
+%         % Sensors
+%         \onslide<3->{
+%           \beltSensor{2.5}{4}{}
+%           \beltSensor{5}{4}{}
+%           \beltSensor{7.5}{4}{}
+%         }
+
+%         % Box
+%         \onslide<4>{\beltBox{3.5}{2}{.5}}
+%         \onslide<5>{\beltBox{2.5}{2}{.5}}
+%         \onslide<6>{\beltBox{1.5}{2}{.5}}
+%         \draw [fill,white,fill opacity=0.7,draw=none] (0.1,0.82) rectangle  (0.2,0.96);
+%         \draw [<-,>=stealth,thick] ([shift=(225:0.25)]9,1.5) arc (225:45:0.25);
+%         \draw [<-,>=stealth,thick] ([shift=(225:0.25)]1,1.5) arc (225:45:0.25);
+
+%         \onslide<4->{\node at (-4,4) { \includegraphics[width=0.2\textwidth]{automates/plc_cropped.jpg}};}
+%       \end{tikzpicture}
+%     }}
+
+%   \renewcommand{\beltBox}[3]{
+%     \draw[] (####1,####2) rectangle ++ (####3,####3);
+%     \draw[] (####1,####2) -- ++ (####3,####3);
+%     \draw[] (####1,####2+####3) -- ++ (####3,-####3);
+%   }
+%   \renewcommand{\beltSensor}[3]{
+%     \draw[] (####1-0.125,####2) rectangle ++ (0.25,.5);
+%     \draw[dashed,] (####1,####2) -- (####1,2);
+%     \draw (####1,####2+1.5) node {####3};
+%   }
+
+%   \only<7->{
+%     \begin{tikzpicture}[remember picture,scale=0.4]
+%       \tikzset{/robotarm/geometry={a=1,r=0.2}}
+%       \begin{scope}[xshift=-1cm,yshift=1.5cm]
+%         \robotArm[draw annotations=false,styles={link/.style={draw=black,fill=none}},config={q1=100,q2=-50,q3=-90}]{3}
+%       \end{scope}
+
+%       % Belt
+%       \draw[] (1,1) -- (9,1);
+%       \draw[] (1,2) -- (9,2);
+%       \draw[] (1,1.5) circle(0.5);
+%       \draw[,fill] (1,1.5) circle(0.05);
+%       \draw[] (9,1.5) circle(0.5);
+%       \draw[,fill] (9,1.5) circle(0.05);
+
+%       % Sensors
+%       \beltSensor{2.5}{4}{}
+%       \beltSensor{5}{4}{}
+%       \beltSensor{7.5}{4}{}
+
+%       % Box
+%       \beltBox{1.5}{2}{.5}
+%       \draw [fill,white,fill opacity=0.7,draw=none] (0.1,0.82) rectangle  (0.2,0.96);
+%       \draw [<-,>=stealth,very thin] ([shift=(225:0.25)]9,1.5) arc (225:45:0.25);
+%       \draw [<-,>=stealth,very thin] ([shift=(225:0.25)]1,1.5) arc (225:45:0.25);
+
+%       \node[inner sep=0] (plc_1) at (-4,4) { \includegraphics[width=1cm]{automates/plc_cropped.jpg}};
+%     \end{tikzpicture}
+
+%     \begin{tikzpicture}[remember picture,scale=0.4]
+%       \tikzset{/robotarm/geometry={a=1,r=0.2}}
+%       \begin{scope}[xshift=-1cm,yshift=1.5cm]
+%         \robotArm[draw annotations=false,styles={link/.style={draw=black,fill=none}},config={q1=120,q2=-40,q3=-90}]{3}
+%       \end{scope}
+
+%       % Belt
+%       \draw[] (1,1) -- (9,1);
+%       \draw[] (1,2) -- (9,2);
+%       \draw[] (1,1.5) circle(0.5);
+%       \draw[,fill] (1,1.5) circle(0.05);
+%       \draw[] (9,1.5) circle(0.5);
+%       \draw[,fill] (9,1.5) circle(0.05);
+
+%       % Sensors
+%       \beltSensor{2.5}{4}{}
+%       \beltSensor{5}{4}{}
+%       \beltSensor{7.5}{4}{}
+
+%       % Box
+%       \beltBox{2.5}{2}{.5}
+
+%       \draw [fill,white,fill opacity=0.7,draw=none] (0.1,0.82) rectangle  (0.2,0.96);
+%       \draw [<-,>=stealth,very thin] ([shift=(225:0.25)]9,1.5) arc (225:45:0.25);
+%       \draw [<-,>=stealth,very thin] ([shift=(225:0.25)]1,1.5) arc (225:45:0.25);
+
+%       \node[inner sep=0] (plc_2) at (-4,4) { \includegraphics[width=1cm]{automates/plc_cropped.jpg}};
+%     \end{tikzpicture}
+
+%     \begin{tikzpicture}[remember picture,scale=0.4]
+%       \tikzset{/robotarm/geometry={a=1,r=0.2}}
+%       \begin{scope}[xshift=-1cm,yshift=1.5cm]
+%         \robotArm[draw annotations=false,styles={link/.style={draw=black,fill=none}},config={q1=100,q2=-70,q3=-50}]{3}
+%       \end{scope}
+
+%       % Belt
+%       \draw[] (1,1) -- (9,1);
+%       \draw[] (1,2) -- (9,2);
+%       \draw[] (1,1.5) circle(0.5);
+%       \draw[,fill] (1,1.5) circle(0.05);
+%       \draw[] (9,1.5) circle(0.5);
+%       \draw[,fill] (9,1.5) circle(0.05);
+
+%       % Sensors
+%       \beltSensor{2.5}{4}{}
+%       \beltSensor{5}{4}{}
+%       \beltSensor{7.5}{4}{}
+
+%       % Box
+%       \beltBox{3.5}{2}{.5}
+%       \draw [fill,white,fill opacity=0.7,draw=none] (0.1,0.82) rectangle  (0.2,0.96);
+%       \draw [<-,>=stealth,very thin] ([shift=(225:0.25)]9,1.5) arc (225:45:0.25);
+%       \draw [<-,>=stealth,very thin] ([shift=(225:0.25)]1,1.5) arc (225:45:0.25);
+
+%       \node[inner sep=0] (plc_3) at (-4,4) { \includegraphics[width=1cm]{automates/plc_cropped.jpg}};
+%     \end{tikzpicture}
+
+%     \begin{tikzpicture}[overlay,remember picture]
+%       \only<8->{
+%       \node[inner sep=0pt,left of=plc_1] (plc1_connection) {};
+%       \node[inner sep=0pt,left of=plc_2] (plc2_connection) {} node[left,text width=3cm,align=center] at (plc2_connection) {How to \\connect them?};
+%       \node[inner sep=0pt,left of=plc_3] (plc3_connection) {};
+%       \draw[dotted] (plc1_connection) -- (plc3_connection);
+%       \draw[dotted] (plc_1.west) -- (plc1_connection);
+%       \draw[dotted] (plc_2.west) -- (plc2_connection);
+%       \draw[dotted] (plc_3.west) -- (plc3_connection);
+%       }
+%     \end{tikzpicture}
+%   }
+% \end{frame}
+
+% \begin{frame}{Network}
+
+%   \vfill
+% Interconnection between things\onslide<+(1)->{, in our case, PLCs and computers.}
+% \\[10pt]
+% \pause
+% Connect to share information.
+
+% \medskip
+% \pause
+% Information sharing allows:
+% \begin{itemize}[<+(1)->]
+%   \item Synchronization
+%   \item Cooperation
+% \end{itemize}
+% \vspace{10pt}
+% \pause
+% Many classifications $\to$ \begin{tabular}{l}
+%   Size\\
+%   Communication\\
+%   Topology\\
+% \end{tabular}
+
+% \bigskip
+
+% \end{frame}
+
+% \begin{frame}{Network classification}{by size}
+%   \begin{description}[<+->]
+%     \item[WAN] Wide Area Network ($\sim$1000km)
+%     \item[MAN] Metropolitan Area Network ($\sim$100km)
+%     \item[LAN] \alert<+->{Local Area Network ($\sim$1km)}
+%   \end{description}
+% \end{frame}
+
+% \begin{frame}{Network classification}{by communication}
+%   Communication:
+%   \begin{itemize}[<+->]
+%     \item Data to be transmitted (digital signals)
+%     \item Data transmission
+%           \begin{itemize}
+%             \item direction
+%             \item type of channel
+%             \item order of transmission
+%             \item synchrony
+%           \end{itemize}
+%   \end{itemize}
+% \end{frame}
+
+% \begin{frame}{Network classification}{by communication --- Transmission direction}
+
+%   \vfill
+%   \begin{minipage}[c]{.45\linewidth}
+%     \begin{itemize}[<+->]
+%       \item Simplex (broadcast)
+%       \item Half-Duplex (Walkie-Talkies)
+%       \item Full-Duplex (Telephone)
+%     \end{itemize}
+%   \end{minipage}
+%   \hfill
+%   \begin{minipage}[c]{.45\linewidth}
+%     \centering
+%     \onslide<1->{
+%       \begin{tikzpicture}
+%         \node[xscale=-1](transmit) at (0,0) {\includegraphics[width=1cm]{industrial_networks/talking-person}};
+%         \node(ear) at (2,0) {\includegraphics[width=1cm]{industrial_networks/ear}};
+%         \draw[->,very thick] (transmit) -- (ear);
+%       \end{tikzpicture}
+%     }
+
+%     \bigskip
+%     \onslide<2->{
+%       \begin{tikzpicture}
+%         \node[xscale=-1](transmit) at (0,0) {\includegraphics[width=.5cm]{industrial_networks/talking-person}};
+%         \node(ear) at (2,0) {\includegraphics[width=.5cm]{industrial_networks/ear}};
+%         \draw[->,very thick] (transmit) -- (ear);
+
+%         \node[](transmit) at (2,-1) {\includegraphics[width=.5cm]{industrial_networks/talking-person}};
+%         \node[xscale=-1](ear) at (0,-1) {\includegraphics[width=.5cm]{industrial_networks/ear}};
+%         \draw[->,very thick] (transmit) -- (ear);
+%         \node[](transmit) at (1,-0.5) {or};
+%       \end{tikzpicture}
+%     }
+
+%     \bigskip
+
+%     \onslide<3->{
+%       \begin{tikzpicture}
+%         % \node[xscale=-1](transmit) at (0,0) {\includegraphics[width=.5cm]{industrial_networks/talking-person}};
+%         % \node(ear) at (2,0) {\includegraphics[width=.5cm]{industrial_networks/ear}};
+%         % \draw[->,very thick] (transmit) -- (ear);
+
+%         % \node[](transmit) at (2,-1) {\includegraphics[width=.5cm]{industrial_networks/talking-person}};
+%         % \node[xscale=-1](ear) at (0,-1) {\includegraphics[width=.5cm]{industrial_networks/ear}};
+%         % \draw[<->,very thick] (transmit) -- (ear);
+%         % \node[](transmit) at (1,-0.5) {or};
+
+%         \node[xscale=-1](transmit) at (0,0) {\includegraphics[width=1cm]{industrial_networks/talking-person}};
+%         \node[] (ear) at (2,0) {\includegraphics[width=1cm]{industrial_networks/talking-person}};
+%         \node[] at (-0.275,.15) {\includegraphics[width=.3cm]{industrial_networks/ear_2}};
+%         \node[xscale=-1] at (2.275,.15) {\includegraphics[width=.3cm]{industrial_networks/ear_2}};
+%         \draw[<->,very thick] (transmit) -- (ear);
+
+%       \end{tikzpicture}
+%     }
+%   \end{minipage}
+% \end{frame}
+
+% \begin{frame}{Network classification}{by communication --- Transmission channel}
+
+%   \vfill
+%   \begin{minipage}[c]{.4\linewidth}
+%     Physical\footnotemark\ media
+
+%     \bigskip
+%     \onslide<2->{Guided}
+%     \begin{itemize}[<+(2)->]
+%       \item \alert<9>{Wires} (usually copper)
+%       \item Waveguides
+%             \begin{itemize}
+%               \item Optical fibers$^{*}$
+%               \item Transmission lines
+%               \item Coaxial cable
+%             \end{itemize}
+%     \end{itemize}
+%     % \end{minipage}
+%     % \begin{minipage}[t]{.45\linewidth}
+%     \onslide<2->{Unguided}
+%     \begin{itemize}[<+(2)->]
+%       \item Wireless
+%     \end{itemize}
+%   \end{minipage}
+%   \hfill
+%   \begin{minipage}[c]{.45\linewidth}
+%     \centering
+
+%     \only<2>{
+%       \raisebox{-1cm}{\includegraphics[width=.4\textwidth]{industrial_networks/sprinkler.jpg}}
+%      \hfill v.s. \hfill\raisebox{-0.6cm}{\includegraphics[width=.4\textwidth]{industrial_networks/watering_can.jpg}}
+
+%      \medskip
+%      Different needs, different solutions!
+%     }
+%     \only<3>{\includegraphics[width=.45\textwidth]{industrial_networks/copper_wire.png}}
+%     \hfill
+%     \only<3>{\includegraphics[width=.45\textwidth]{industrial_networks/rs232.jpg}}
+
+%     \only<3>{\includegraphics[width=.45\textwidth]{industrial_networks/usb_cable.jpg}}
+%     \only<4>{\includegraphics[width=\textwidth]{industrial_networks/waveguide.png}}
+%     \only<5>{\includegraphics[width=\textwidth]{industrial_networks/optical_fibre.jpg}}
+%     \only<6>{\includegraphics[width=\textwidth]{industrial_networks/transmission_lines.jpg}}
+%     \only<7>{\includegraphics[width=\textwidth]{industrial_networks/coaxial_bnc.jpg}}
+%     \only<8>{\includegraphics[width=\textwidth]{industrial_networks/zigbee.JPG}}
+%   \end{minipage}
+
+%   \footnotetext{This is a lie! EM wave propagation medium can be the vacuum! \faSatelliteDish\ \faSatellite}
+% \end{frame}
+
+% \begin{frame}{Network classification}{by communication --- Order of Transmission}
+
+%   \vfill
+%   \begin{minipage}[t]{.45\linewidth}
+%     Serial - bits sent one at a time
+
+%     \bigskip
+%     \newcommand{\cable}{\hfill \raisebox{3pt}{\rule{3cm}{1pt}}\hfill}
+%     \visible<-8>{0}\visible<-7>{1}\visible<-6>{0}\visible<-5>{1}\visible<-4>{0}\visible<-3>{0}\visible<-2>{1}\visible<-1>{0}\cable \visible<9->{0}\visible<8->{1}\visible<7->{0}\visible<6->{1}\visible<5->{0}\visible<4->{0}\visible<3->{1}\visible<2->{0}
+
+%   \end{minipage}
+%   \hfill
+%   \begin{minipage}[t]{.45\linewidth}
+%     Parallel - bits sent at the same time
+%     \newcommand{\cable}{\raisebox{3pt}{\rule{5.6cm}{1pt}}\hfill}
+
+%     \bigskip
+%     \only<-9>{0 \cable \phantom{1} \\1 \cable \phantom{1}\\0 \cable\phantom{1}\\1 \cable\phantom{1}\\0 \cable\phantom{1}\\0 \cable\phantom{1}\\1 \cable\phantom{1}\\0 \cable\phantom{1}}
+
+%     \only<10->{\phantom{0} \cable 0\par \phantom{0} \cable 1\par\phantom{0} \cable 0\par\phantom{0} \cable 1\par\phantom{0} \cable 0\par\phantom{0} \cable 0\par\phantom{0} \cable 1\par\phantom{0} \cable 0}
+
+%     \vfill
+
+%   \end{minipage}
+%   \vfill
+%   \onslide<11>{
+%     \begin{minipage}[t]{.45\linewidth}
+%       \centering
+%       More time, less wires.
+%     \end{minipage}
+%     \hfill
+%     \raisebox{-5pt}{\resizebox{.7cm}{!}{\faBalanceScale}}
+%     \hfill
+%     \begin{minipage}[t]{.45\linewidth}
+%       \centering
+%       More wires, less time.
+%     \end{minipage}
+%   }
+% \end{frame}
+
+% \begin{frame}{Network classification}{by communication --- Synchrony}
+
+%   \bigskip
+%   Where does new data begin?
+%   \only<1>{Send 10101100}
+%   \only<2->{Send 1\quad 0\quad 1\quad 0\quad 1\quad 1\quad 0\quad 0}
+
+%   \onslide<3->{\phantom{Where does new data begin? Send} \texttiming[timing/slope=0]{HHLLHHLLHHHHLLLL}}
+
+
+% \bigskip
+% \begin{overlayarea}{\textwidth}{5cm}
+% \onslide<4->{Asynchronous} \only<6->{(needs {\color{green!80!black} start} and {\color{red} stop} bits)}
+
+% \medskip
+% \begin{overlayarea}{\textwidth}{.25cm}
+%   \only<7>{
+%     \begin{tikztimingtable}[timing/slope=0]
+%       Data & 4{LL} \\
+%     \end{tikztimingtable}
+%   }
+%   \only<8>{
+%     \begin{tikztimingtable}[timing/slope=0]
+%       Data & 4{LL};[green!80!black]HH;\\
+%     \end{tikztimingtable}
+%   }
+%   \only<9>{
+%     \begin{tikztimingtable}[timing/slope=0]
+%       Data & 4{LL};[green!80!black]HH;HHLLHHLLHHHHLLLL\\
+%     \end{tikztimingtable}
+%   }
+%   \only<10>{
+%     \begin{tikztimingtable}[timing/slope=0]
+%       Data & 4{LL};[green!80!black]HH;HHLLHHLLHHHHLLLL;[red]LL\\
+%     \end{tikztimingtable}
+%   }
+%   \only<11-13>{
+%     \begin{tikztimingtable}[timing/slope=0]
+%       Data & 4{LL};[green!80!black]HH;HHLLHHLLHHHHLLLL;[red]LL;3{LL}\\
+%     \end{tikztimingtable}
+%   }
+
+%   \only<14->{
+%     \begin{tikztimingtable}[timing/slope=0]
+%       Data & 4{LL};;[green!80!black]HH;16{D}{Data};[red]LL;3{LL}\\
+%     \end{tikztimingtable}
+%   }
+% \end{overlayarea}
+
+% \vspace{1cm}
+
+% \onslide<5->{Synchronous} \only<12->{(needs a clock signal)}
+
+% \only<13>{
+% \begin{tikztimingtable}[timing/slope=0]
+% Clock& 16{C}C\\
+% Data & ;[black]ZHHLLHHLLHHHHLLLL;[black]Z\\
+% \extracode
+% \begin{pgfonlayer}{background}
+% \vertlines[help lines]{1,3,5,7,9,11,13,15}
+% \end{pgfonlayer}
+% \end{tikztimingtable}
+% }
+% \only<14->{
+% \begin{tikztimingtable}[timing/slope=0]
+% Clock& 16{C}C\\
+% Data & Z16{D}{Data}Z\\
+% \extracode
+% \begin{pgfonlayer}{background}
+% \vertlines[help lines,color=gray!30]{1,3,5,7,9,11,13,15}
+% \end{pgfonlayer}
+% \end{tikztimingtable}
+% }
+% \end{overlayarea}
+
+% \end{frame}
+
+% \begin{frame}{Coming Next ...}
+
+%   \vfill
+%   \centering
+%   \begin{minipage}[c]{0.5\linewidth}
+%     \begin{itemize}
+%       \item Topologies (star, mesh ...)
+%       \item OSI model
+%     \end{itemize}
+%   \end{minipage}
+%   \hfill
+%   \begin{minipage}[c]{.3\linewidth}
+%   \resizebox{.5\textwidth}{!}{
+%     \begin{tikzpicture}[inner sep=0pt,every node/.style={draw,circle,minimum width=0.3cm},coordinator/.style={fill=auditionPrimary},agent/.style={fill=auditionPrimary!30,minimum width=0.2cm}]
+%       \graph { subgraph I_n [--,radius=.75cm,n=5,clockwise,empty nodes,nodes={agent}] -- a/[coordinator],
+%       };
+%     \end{tikzpicture}
+%   }
+
+%   \bigskip
+%   \resizebox{.5\textwidth}{!}{
+%     \begin{tikzpicture}[inner sep=0pt,,every node/.style={draw,circle,minimum width=0.3cm},node distance=.5cm and .5cm,inner sep=0pt,agent/.style={fill=auditionPrimary!30,minimum width=0.2cm}]
+%       \node[agent] at (0,0) (a) {};
+%       \node[agent] at ($(a)+(-.7,-.3)$) (b) {};
+%       \node[agent] at ($(a)+(0.0,-0.8)$) (c) {};
+%       \node[agent] at ($(a)+(0.8,-0.4)$) (d) {};
+%       \node[agent] at ($(b)+(0.1,-1.0)$) (e) {};
+%       \node[agent] at ($(e)+(1.2,-0.1)$) (f) {};
+%       \node[agent] at ($(f)+(0.6,0.4)$) (g) {};
+%       \node[agent] at ($(e)+(-0.8,-0.0)$) (h) {};
+%       \node[agent] at ($(f)+(-0.5,-0.5)$) (i) {};
+
+%       \draw[-]  (a)  -- (b);
+%       \draw[-]  (a)  -- (c);
+%       \draw[-]  (a)  -- (d);
+%       \draw[-]  (b)  -- (c);
+%       \draw[-]  (c)  -- (d);
+%       \draw[-]  (e)  -- (b);
+%       \draw[-]  (e)  -- (c);
+%       \draw[-]  (c)  -- (f);
+%       \draw[-]  (d)  -- (g);
+%       \draw[-]  (f)  -- (g);
+%       \draw[-]  (e)  -- (h);
+%       \draw[-]  (f)  -- (i);
+%     \end{tikzpicture}
+%   }
+%   \end{minipage}
+% \end{frame}
+
+% % \begin{frame}
+% %   \newlength{\ladderskip}
+% % \setlength{\ladderskip}{5\tikzcircuitssizeunit}% 5\tikzcircuitssizeunit = 35pt
+% % % \newlength{\ladderrungsep}
+% % \setlength{\ladderrungsep}{.2\ladderskip}
+% % \def\ladderrungend#1{\pgftransformyshift{-#1\ladderskip-\ladderrungsep}}
+% %   \begin{tikzpicture}[circuit plc ladder,
+% %   thick, label distance=0pt,x=\ladderskip,y=\ladderskip]
+% % \scope
+
+% %   \draw(0,0)
+% %   to [contact NO={info={A}}] ++(1,0) coordinate(laddercoil) -- ++(2,0)
+% %   to [coil={info={C}}] ++(1,0)coordinate(laddertopright);
+% %   \draw(0,-1)
+% %   to [contact NO={info={B}}] ++(1,0) -- (laddercoil);
+% %   \ladderrungend{2.3}
+
+% %   % power rails
+% %   \draw let \p1=(laddertopright) in
+% %   (0,\y1+0.7\ladderskip) -- (0,\ladderskip)
+% %   (\x1,\y1+0.7\ladderskip) -- (\x1,\ladderskip);
+% %   \endscope
+
+% %   \end{tikzpicture}
+
+% % %   \newlength{\ladderskip}
+% % \setlength{\ladderskip}{5\tikzcircuitssizeunit}% 5\tikzcircuitssizeunit = 35pt
+% % % \newlength{\ladderrungsep}
+% % \setlength{\ladderrungsep}{.2\ladderskip}
+% % \def\ladderrungend#1{\pgftransformyshift{-#1\ladderskip-\ladderrungsep}}
+% %   \begin{tikzpicture}[circuit plc ladder,
+% %   thick, label distance=0pt,x=\ladderskip,y=\ladderskip]
+% % \scope
+% %   % \draw(0,0)
+% %   % to [contact NO={info={[label={[blue]$b_1$}]\%I0.1}}] ++(1,0)
+% %   % -- ++(1,0)
+% %   % to [block={inputs={IN,PT},outputs={Q,ET},symbol=TOFF,name=tp1,
+% %   %   minimum width=1.2\ladderskip,
+% %   %   input sep=0.3\ladderskip, output sep=0.3\ladderskip}] ++(2,0)
+% %   % to [coil S={info={[label={[blue]$K_1$}]\%Q0.1}}] +(1,0)coordinate(laddertopright);
+% %   % \draw (tp1.output 2) -- +(0.3\ladderskip,0)
+% %   % (tp1.input 2) -- +(-0.3\ladderskip,0) node[left]{T\#3s};
+% %   % \ladderrungend{1.2}
+
+% %   \draw(0,0)
+% %   to [contact NC={info={A}}] ++(2,0) -- ++(2,0)
+% %   to [coil={info={C}}] +(1,0)coordinate(laddertopright);
+% %   \ladderrungend{1.3}
+
+% %   % power rails
+% %   \draw let \p1=(laddertopright) in
+% %   (0,\y1+0.7\ladderskip) -- (0,\ladderskip)
+% %   (\x1,\y1+0.7\ladderskip) -- (\x1,\ladderskip);
+% %   \endscope
+
+
+% %   \end{tikzpicture}
+
+
+% % %   \newlength{\ladderskip}
+% % \setlength{\ladderskip}{5\tikzcircuitssizeunit}% 5\tikzcircuitssizeunit = 35pt
+% % % \newlength{\ladderrungsep}
+% % \setlength{\ladderrungsep}{.2\ladderskip}
+% % \def\ladderrungend#1{\pgftransformyshift{-#1\ladderskip-\ladderrungsep}}
+% %   \begin{tikzpicture}[circuit plc ladder,
+% %   thick, label distance=0pt,x=\ladderskip,y=\ladderskip]
+% % \scope
+% %   % \draw(0,0)
+% %   % to [contact NO={info={[label={[blue]$b_1$}]\%I0.1}}] ++(1,0)
+% %   % -- ++(1,0)
+% %   % to [block={inputs={IN,PT},outputs={Q,ET},symbol=TOFF,name=tp1,
+% %   %   minimum width=1.2\ladderskip,
+% %   %   input sep=0.3\ladderskip, output sep=0.3\ladderskip}] ++(2,0)
+% %   % to [coil S={info={[label={[blue]$K_1$}]\%Q0.1}}] +(1,0)coordinate(laddertopright);
+% %   % \draw (tp1.output 2) -- +(0.3\ladderskip,0)
+% %   % (tp1.input 2) -- +(-0.3\ladderskip,0) node[left]{T\#3s};
+% %   % \ladderrungend{1.2}
+
+% %   \draw(0,0)
+% %   to [contact NO={info={A}}] ++(1,0)
+% %   to [contact NO={info={B}}] ++(1,0) -- ++(2,0)
+% %   to [coil={info={C}}] +(1,0)coordinate(laddertopright);
+% %   \ladderrungend{1.3}
+
+% %   % power rails
+% %   \draw let \p1=(laddertopright) in
+% %   (0,\y1+0.7\ladderskip) -- (0,\ladderskip)
+% %   (\x1,\y1+0.7\ladderskip) -- (\x1,\ladderskip);
+% %   \endscope
+
+
+% %   \end{tikzpicture}
+% % \end{frame}
+
+\begin{frame}[plain]
+  \endpage%
+  % \vfill
+  \centering
+  \begin{minipage}[t]{.5\linewidth}
+    \small
+    \centering
+    {
+    \usebeamercolor[fg]{title}Questions?
+
+    \vspace{.5cm}
+    \href{mailto:r.nogueira@univ-angers.fr?subject=Presentation IFAC WC 2026}{r.nogueira@univ-angers.fr}
+
+    \vspace{.5cm}
+    \qrcode[hyperlink]{mailto:r.nogueira@univ-angers.fr?subject=Presentation\ IFAC\ WC\ 2026}
+    }
+  \end{minipage}
+\end{frame}
+
+\appendix
+
+\end{document}

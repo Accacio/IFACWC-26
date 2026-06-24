@@ -1,0 +1,276 @@
+
+\newcommand{\0}{\mathbf{0}}
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\aposteriori}[0]{\textit{posterior}}
+\newcommand{\Aposteriori}[0]{\textit{Posterior}}
+\newcommand{\apriori}[0]{\textit{prior}}
+\newcommand{\Apriori}[0]{\textit{Prior}}
+\newcommand{\argmax}{\mathop{\arg\!\max}}
+\newcommand{\argmin}{\mathop{\arg\!\min}}
+\newcommand\at[2]{\left.#1\right|_{#2}}
+\newcommand{\blkdiag}{\mathop{\rotatebox{90}{$\diameter$}}}
+\newcommand{\C}{\mathbb{C}}
+%\newcommand{\cz}{\ensuremath{\mathcal{C}\mathrm{-zonotope}}}
+%\newcommand{\czs}{\ensuremath{\mathcal{C}\mathrm{-zonotopes}}}
+\newcommand{\defpos}{\mathbb{S}_{++}}
+\newcommand{\diff}{\mathop{}\mathopen{}\mathrm{d}}
+\newcommand{\dir}{\mathop{dir}}
+\newcommand{\dotp}[2]{\langle #1,#2\rangle}
+\newcommand{\elem}[2][1]{{#2}_{(#1)}}
+\newcommand{\eq}[2]{\mbox{$#1=#2$}}
+\newcommand{\expectation}[2][]{\mathbb{E}_{#1}\left[#2\right]}
+% \newcommand{\final}[0]{\textit{ final }}
+% \newcommand{\Final}[0]{\textit{ Final }}
+\newcommand{\graph}[1]{\mathscr{#1}}
+\newcommand{\hadamard}[2]{#1\circ #2}
+\newcommand{\h}{^{(h)}}
+\newcommand{\hplusone}{^{(h+1)}}
+\newcommand{\imid}[1]{\operatorname{mid}(#1)}
+\newcommand{\indicator}[1]{\mathbb{1}_{\{#1\}}}
+\newcommand{\inspacey}[0]{\; \in \,}
+\newcommand{\kron}[2]{#1\otimes#2}
+\newcommand{\lbound}[1]{\underline{#1}}
+\newcommand{\Matlabbrand}{Matlab\textsuperscript{\tiny{\textregistered}}\;}
+\newcommand{\maximiser}{\mathop{\textrm{maximiser}}}
+\newcommand{\maximize}{\mathop{\textrm{maximize}}}
+\newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\mbf}[1]{\mathbf{#1}}
+\newcommand{\minimiser}{\mathop{\textrm{minimiser}}}
+\newcommand{\minimize}{\mathop{\textrm{minimize}}}
+\newcommand{\minksum}[0]{{\mbox{\scriptsize $\bigoplus$}}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\Np}{N_{\text{p}}}
+\newcommand{\pdf}[1]{p(#1)}
+\newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\pluseq}{\mathrel{+}=}
+\newcommand{\post}[1]{\overrightarrow{#1}}
+\newcommand{\p}{^{(p)}}
+\newcommand{\pplusone}{^{(p+1)}}
+\newcommand{\pre}[1]{\overleftarrow{#1}}
+\newcommand{\probability}[1]{\mathbb{P}(#1)}
+\newcommand{\pseudoinv}[1]{{#1}^{\dagger}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\rad}[1]{\operatorname{rad}(#1)}
+\newcommand{\random}[1]{\underline{#1}}
+\newcommand{\randomvec}[1]{{\underline{\vec{#1}}}}
+\newcommand{\RM}[2]{{\ensuremath{\mbf{R_{\mathrm{#1 #2}}}}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\semidefpos}{\mathbb{S}_{+}}
+\newcommand{\seq}[2][n]{\lbrace #2_{0},\ldots,\,#2_{#1} \rbrace}
+\newcommand{\set}[1]{\mathcal{#1}}
+\newcommand{\setbuild}[2]{\{#1\mid#2\}}
+\newcommand{\smallfigwidth}{0.99\linewidth}
+\newcommand{\symmetric}{\mathbb{S}}
+\newcommand{\T}{^{\mathrm{T}}}
+\newcommand{\ubound}[1]{\overline{#1}}
+\newcommand{\unitInterval}{\set{E}}
+\newcommand{\until}{\mathbin{:}}
+\newcommand{\upd}[1]{{#1}^\prime}
+\newcommand{\Varepsilon}{\mathcal{E}}
+\newcommand{\vecangle}[2]{\langle_{#1}^{#2}}
+\newcommand{\vectorize}[1]{\mathrm{vec} (#1)}
+\newcommand{\Z}{\mathbb{Z}}
+\renewcommand{\iff}{\Leftrightarrow}
+\renewcommand{\implies}{\Rightarrow}
+\renewcommand{\vec}[1]{\boldsymbol{#1}}
+
+\DeclareMathOperator{\elemend}{end}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\fix}{fix}
+\DeclareMathOperator{\Proj}{Proj}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\card}{\#}
+% \DeclareMathOperator{\vectorize}{vector}
+% \DeclareMathOperator{\vector}{vec}
+%
+
+% Theorem
+% \newtheorem{thm}{Theorem}[section]
+% \newtheorem{lem}[thm]{Lemma}
+
+\newcommand{\nsubsystems}{M}
+\newcommand{\umax}{\vec{u}_{\mathrm{\max}}}
+\newcommand{\predhorz}{N}
+\newcommand{\predictionSet}{\set{N}}
+\newcommand{\nineq}{n_{\text{ineq}}}
+
+\NewDocumentCommand \mpcvec { s m o o o } {%
+  \IfBooleanTF{#1}{
+    \def\optim{^\star}
+  }{
+    \def\optim{}
+  }
+  \IfValueTF{#5}{
+    {\vec{#2}_{#3}}\optim{}[#4|#5]
+  }{
+    \IfValueTF{#4}{
+      {\vec{#2}_{#3}}\optim{}[#4]
+    }
+    {
+    \IfValueTF{#3}{
+      {\vec{#2}_i}\optim{}[#3]
+    }
+    {
+      {\vec{#2}_i}\optim{}[k]
+    }
+    }
+  }
+}
+
+
+\NewDocumentCommand \mpcval { s m o o o } {%
+  \IfBooleanTF{#1}{
+    \def\optim{^\star}
+  }{
+    \def\optim{}
+  }
+  \IfValueTF{#5}{
+    {#2}_{#3}\optim{}[#4|#5]
+  }{
+    \IfValueTF{#4}{
+      {#2}_{#3}\optim{}[#4]
+    }
+    {
+    \IfValueTF{#3}{
+      {#2}_i\optim{}[#3]
+    }
+    {
+      {#2}_i\optim{}[k]
+    }
+    }
+  }
+}
+
+
+
+
+
+
+\newcommand{\uikk}{\mpcvec{u}[i][k][k]}
+\newcommand{\optuikk}{\mpcvec*{u}[i][k][k]}
+
+\newcommand{\globobj}{\mpcval{J}[][k]}
+\newcommand{\optglobobj}{\mpcval*{J}[][k]}
+
+\newcommand{\eqobj}{\bar{J}}
+\newcommand{\eqoptobj}{\eqobj^{\star}}
+\newcommand{\eqobji}{\eqobj_{i}}
+\newcommand{\eqoptobji}{\eqobj_{i}^{\star}}
+\newcommand{\obj}{J}
+\newcommand{\optobj}{\obj^{\star}}
+\newcommand{\obji}{\obj_{i}}
+\newcommand{\optobji}{\obj_{i}^{\star}}
+\newcommand{\Jacc}{\obj^{\text{acc}}}
+\newcommand{\Jiacc}[1][i]{\obj_{#1}^{\text{acc}}}
+
+
+\newcommand{\xik}{\mpcvec{x}}
+\newcommand{\fik}{\mpcvec{f}}
+\newcommand{\uik}{\mpcvec{u}}
+\newcommand{\uiseq}{\mpcvec{u}[i][k:k+\predhorz-1][k]}
+\newcommand{\optuiseq}{\mpcvec*{u}[i][k:k+\predhorz-1][k]}
+
+\newcommand{\useq}{\mpcvec{u}[ ][k:k+\predhorz-1][k]}
+\newcommand{\optuseq}{\mpcvec*{u}[ ][k:k+\predhorz-1][k]}
+\newcommand{\Uik}{\mpcvec{U}}
+\newcommand{\optUik}{\mpcvec*{U}}
+
+
+\newcommand{\unconstrained}[1]{\mathring{#1}}
+\newcommand{\modified}[1]{\accentset{\text{mod}}{#1}}
+\newcommand{\reconstructed}[1]{\accentset{\text{rec}}{#1}}
+
+\newcommand{\optuncUik}{\unconstrained{\vec{U}}^{\star}_i[k]}
+\newcommand{\optuncU}{{\unconstrained{\vec{U}}^{\star}}}
+
+\newcommand{\vik}{\mpcvec{v}}
+\newcommand{\wik}{\mpcvec{w}}
+\newcommand{\wiseq}{\mpcvec{w}[i][k:k+\predhorz-1][k]}
+\newcommand{\Wik}{\mpcvec{W}}
+
+\newcommand{\qik}{\mpcvec{q}}
+\newcommand{\qiseq}{\mpcvec{q}[i][k:k+\predhorz-1][k]}
+\newcommand{\thetaik}{\mpcvec{\theta}}
+\newcommand{\optthetaiseq}{\mpcvec*{\theta}[i][k:k+\predhorz-1][k]}
+\newcommand{\thetaseq}{\mpcvec{\theta}[][k:k+\predhorz-1][k]}
+\newcommand{\optthetaseq}{\mpcvec*{\theta}[][k:k+\predhorz-1][k]}
+\newcommand{\thetai}[1][i]{\vec{\theta}_{#1}}
+\newcommand{\optthetai}{\vec{\theta}_i^{\star}}
+
+\newcommand{\dik}{\mpcvec{d}}
+\newcommand{\diseq}{\mpcvec{d}[i][k:k+\predhorz-1][k]}
+\newcommand{\lambdaik}{\mpcvec{\lambda}}
+\newcommand{\lambdaikstar}{\mpcvec*{\lambda}}
+\newcommand{\lambdai}[1][i]{\vec{\lambda}_{#1}}
+% \newcommand{\modified}[1]{\underaccent{\sim}{#1}}
+\newcommand{\lambdaimodified}{\modified{\vec{\lambda}}_{i}}
+\newcommand{\lambdamodified}{\modified{\vec{\lambda}}}
+\newcommand{\lambdaireconstructed}{\reconstructed{\vec{\lambda}}_{i}}
+\newcommand{\lambdaicheat}{\tilde{\vec{\lambda}}_{i}}
+\newcommand{\thetairestricted}{\overset{\scalebox{.5}{$\diameter$}}{\thetai}}
+
+% \newcommand{\Tik}{\mpcval{T}}
+\newcommand{\Tik}[1][i]{T_{#1}[k]}
+\newcommand{\Tikinvestimate}[1][i]{\widehat{\Tik[#1]^{-1}}}
+\newcommand{\Plin}[1][i]{{P}_{#1}}
+\newcommand{\Plinnominal}[1][i]{\bar{{P}}_{#1}}
+\newcommand{\Plintilde}[1][i]{\tilde{P}_{#1}[k]}
+\newcommand{\Plintildeestimate}[1][i]{\widehat{\tilde{P}}_{#1}[k]}
+\newcommandx*\Plinineq[2][1=i, 2=0]{\Plin[#1]^{\left(#2\right)}}
+\newcommandx*\Plinineqnominal[2][1=i, 2=0]{\bar{\Plin[#1]}^{\left(#2\right)}}
+\newcommandx*\Plinineqtilde[2][1=i, 2=0]{\widetilde{\Plin[#1]}^{\left(#2\right)}}
+\newcommandx*\Plinineqtildeestimate[2][1=i, 2=0]{\widehat{\widetilde{\Plin[#1]}}^{\left(#2\right)}[k]}
+
+\newcommand{\sik}[1][i]{\vec{s}_{#1}[k]}
+\newcommand{\siktilde}[1][i]{\tilde{\vec{s}}_{#1}[k]}
+\newcommand{\siktildeestimate}[1][i]{\widehat{\tilde{\vec{s}}}_{#1}[k]}
+\newcommandx*\sikineq[2][1=i, 2=0]{\vec{s}_{#1}^{\left(#2\right)}[k]}
+\newcommandx*\sikineqtilde[2][1=i, 2=0]{\widetilde{\vec{s}_{#1}}^{\left(#2\right)}[k]}
+\newcommandx*\sikineqtildeestimate[2][1=i, 2=0]{\widehat{\widetilde{\vec{s}_{#1}}}^{\left(#2\right)}[k]}
+
+\newcommand{\lagrangianname}{\mathscr{L}}
+\newcommand{\lagrangian}{\lagrangianname(\vec{U}_{i}[k],\lambdaik,\thetaik)}
+\newcommand{\dualfunctionname}{\mathscr{D}}
+\newcommand{\dualfunction}{\dualfunctionname(\lambdaik,\thetaik)}
+\newcommand{\inequalityfunctionname}{g_i}
+\newcommand{\inequalityfunction}{\inequalityfunctionname(\vec{U}_{i}[k],\thetaik)}
+\newcommand{\equalityfunctionname}{h_i}
+\newcommand{\equalityfunction}{\equalityfunctionname(\vec{U}_{i}[k],\thetaik)}
+\newcommand{\linearcoefi}{\bar{\Gamma}_{i}H_{i}^{-1}\bar{\Gamma_{i}}^{T}}
+\newcommand{\linearcoefiineqnonzero}[1][\star,\star]{\elem[#1]{\bar{\Gamma}_{i}}H_{i}^{-1}{(\elem[#1]{\bar{\Gamma}_{i}})}^{T}}
+
+\newcommand{\rlsparam}{{\vec{\nu}_{i}}}
+\newcommand{\rlssysinput}{{B_i}}
+\newcommand{\rlssysoutput}{{\lambdai}}
+\newcommand{\rlsgain}{{\Phi}}
+\newcommand{\rlsforget}{{\phi}}
+\newcommand{\rlsresidual}{{\epsilon}}
+
+\newcommand{\pwaestparam}{{\vec{\nu}}}
+\newcommand{\pwaestnumparam}{{n}}
+\newcommand{\pwaestsysinput}{{B}}
+\newcommand{\pwaestsysoutput}{{\vec{\gamma}}}
+\newcommand{\pwaestgain}{{\Phi}}
+\newcommand{\pwaestforget}{{\phi}}
+\newcommand{\pwaestresidual}{{\epsilon}}
+\newcommand{\pwaestinputsize}{{N}}
+
+
+\SetKwProg{Fn}{}{}{}
+\SetKwFunction{structDataSym}{structDataSym}%
+\SetKwBlock{coordinit}{ Coordinator initialization:}{}
+\SetKwBlock{exchange}{ Exchange between Coordinator and agents:}{}
+\SetKwBlock{negotPhase}{ Negotiation Phase:}{}
+\SetKwBlock{detectPhase}{ Detection Phase:}{}
+
+\SetKwBlock{coordinitfr}{ Initialisation du Coordinateur:}{}
+\SetKwBlock{exchangefr}{ Échange entre Coordinateur et agents:}{}
+\SetKwBlock{negotPhasefr}{ Phase de Négociation:}{}
+\SetKwBlock{detectPhasefr}{ Phase de Détection:}{}
+\SetKwIF{Si}{SinonSi}{Sinon}{si}{alors}{sinon si}{sinon}{}
+\SetKwFor{Tq}{tant que}{faire}{fintq}
+\SetKwRepeat{Repeter}{répéter}{jusqu’à}
+\SetKwInput{Entree}{Entrées}
+\SetKwInput{Sortie}{Sorties}
