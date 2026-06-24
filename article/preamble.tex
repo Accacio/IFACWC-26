@@ -1,0 +1,96 @@
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{xargs}
+%\usepackage{pdfcomment}
+\usepackage{tikz}
+\usepackage{microtype}
+\usepackage{siunitx}
+\usepackage{longtable,tabularx}
+\setlength\LTleft{0pt}
+
+\usepackage[math]{blindtext}
+\usepackage{xcolor}
+
+\usepackage{import}
+\usepackage{subcaption}
+\usepackage{moreverb}
+
+% \usepackage[bbgreekl]{mathbbol}
+% \usepackage{mathbbol}
+% \DeclareSymbolFontAlphabet{\mathbbl}{bbold}
+\usepackage{graphicx}
+\usepackage[many]{tcolorbox}
+
+% \usepackage{physics}
+% \usepackage{placeins}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage[notextcomp]{stix}
+\usepackage{mathtools}
+%\DeclareSymbolFontAlphabet{\mathbb}{AMSb}
+%\DeclareFontFamily{U}{stix2bb}{\skewchar\font127 }
+%\DeclareFontShape{U}{stix2bb}{m}{n} {<-> stix2-mathbb}{}
+% \DeclareMathAlphabet{\mathbb}{U}{stix2bb}{m}{n}
+
+\usepackage[ddmmyyyy]{datetime}
+\usepackage[linesnumbered,ruled,vlined,algo2e]{algorithm2e}
+
+\newif\ifdebug%
+\newcommand{\draft}{\debugtrue}
+\newcommand{\final}{\debugfalse}
+\newcommand{\todo}[2][FORGOT TO DO SOMETHING]{\ifdebug%
+	{%
+	  \color{red}
+	  #2}\else \PackageError{}{#1}{#2}#2\fi}%
+\newcommand\doing[2][FORGOT TO DO SOMETHING]{\ifdebug%
+	{%
+	  \color{blue}
+	  #2}\else \PackageError{}{#1}{#2}#2\fi}%
+\newcommand\warning[1]{\ifdebug%
+	{%
+	  \color{red}
+	  #1}\fi}
+\renewcommand\note[2][]{\ifdebug%
+  {\pdfcomment[color=red,opacity=0.4,subject=note,author=#1]{#2}} \fi}
+\newcommand\highlight[3][]{\ifdebug%
+  {\pdfmarkupcomment[color=red,opacity=0.4,author=#1]{#2}{#3}} \fi}
+
+
+\newcommand\lastcompiled{\footnotesize{\warning{Compiled on \today{} at \currenttime}}}
+
+\newcommand{\mysmall}{\fontsize{7.5pt}{8pt}\selectfont}
+\newcommand{\no}[1]{}
+
+\usepackage{lineno}
+%\usepackage{hyperref}
+%
+%% \AtBeginDocument{
+%\hypersetup{
+%   % pdfauthor   = {\@author},
+%	 % pdfproducer = {LaTeX},
+%   % pdftitle    = {\@title},
+%   % pdfkeywords    = {\@keywordsEN},
+%   % pdfsubject = {\@subject},
+%   colorlinks=true,
+% }
+% }
+
+
+%\modulolinenumbers[5]
+% Each section on new page?
+% \newcommand{\jsection}[1]{\clearpage \section{#1}}
+
+\graphicspath{{../img/}}
+
+\input{math}
+\input{glossary}
+
+\newtheorem{remark}{Remark}
+\def\th@remark{%
+    \thm@headfont{\itshape}%
+    \normalfont % body font
+    \thm@preskip\parskip \divide\thm@preskip\tw@
+    \thm@postskip\z@
+  }
