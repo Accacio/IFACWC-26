@@ -33,8 +33,9 @@
 }
 }
 
-\LoadClass[aspectratio=169]{beamer}
-%\LoadClass[]{beamer}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{beamer}}
+\ProcessOptions\relax
+\LoadClass{beamer}
 
 \definecolor{auditionWhite}{RGB}{255, 255, 255}
 \definecolor{auditionPrimary}{RGB}{120,30,56}
