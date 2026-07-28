@@ -72,124 +72,124 @@
     \centering
     \scalebox{0.75}{
       \onslide<2->{
-      \begin{tikzpicture}
-        \node (0,0) {\includegraphics[width=4.5cm]{neocampus/crossroad.png}};
+        \begin{tikzpicture}
+          \node (0,0) {\includegraphics[width=4.5cm]{neocampus/crossroad.png}};
 
-        \node (car_red) at (0.25,-1) {\includegraphics[height=.75cm]{neocampus/car_red}};
+          \node (car_red) at (0.25,-1) {\includegraphics[height=.75cm]{neocampus/car_red}};
 
-        \node[above right=.9cm of car_red] (car_purple_position) {};
-        \node (car_purple) at (car_purple_position) {\includegraphics[height=.75cm,angle=90]{neocampus/car_purple}};
+          \node[above right=.9cm of car_red] (car_purple_position) {};
+          \node (car_purple) at (car_purple_position) {\includegraphics[height=.75cm,angle=90]{neocampus/car_purple}};
 
-        \node[above left=-.2cm and 1cm of car_purple] (car_brown_position) {};
+          \node[above left=-.2cm and 1cm of car_purple] (car_brown_position) {};
 
-        \node (car_brown) at (car_brown_position) {\includegraphics[height=.75cm]{neocampus/car_brown}};
-      \end{tikzpicture}
-    }}
+          \node (car_brown) at (car_brown_position) {\includegraphics[height=.75cm]{neocampus/car_brown}};
+        \end{tikzpicture}
+      }}
   \end{minipage}
 \end{frame}
 
 % \begin{frame}{Context}
 %   \begin{minipage}{.5\textwidth}
 %     \begin{itemize}
-%       \item Increase of use of autonomous systems
-%       \item Autonomous Vehicles
-%       \item Navigation + Control
-%       \item We need state measurement/estimates
-%     \end{itemize}
-%   \end{minipage}
-%   \hfill
-%   \begin{minipage}{.3\textwidth}
-%     \centering
-%     \scalebox{0.75}{
-%       \begin{tikzpicture}
-%         \node[alt=<{3-}>{opacity=0.2}] (0,0) {\includegraphics[width=4.5cm]{neocampus/crossroad.png}};
+              %         \item Increase of use of autonomous systems
+              %         \item Autonomous Vehicles
+              %         \item Navigation + Control
+              %         \item We need state measurement/estimates
+              %       \end{itemize}
+              %               \end{minipage}
+              %               \hfill
+              %               \begin{minipage}{.3\textwidth}
+              %               \centering
+              %               \scalebox{0.75}{
+              %               \begin{tikzpicture}
+              %               \node[alt=<{3-}>{opacity=0.2}] (0,0) {\includegraphics[width=4.5cm]{neocampus/crossroad.png}};
 
-%         \node (car_red) at (0.25,-1) {\includegraphics[height=.75cm]{neocampus/car_red}};
+              %               \node (car_red) at (0.25,-1) {\includegraphics[height=.75cm]{neocampus/car_red}};
 
-%         \node[above right=.9cm of car_red] (car_purple_position) {};
-%         \onslide<3->{
-%           \path[draw,use Hobby shortcut,closed=true,violet!50!white,fill=violet!50!white,opacity=0.75]
-%           ($(car_purple_position)+(.5,0)$) .. ++(-.3,.3) .. ++(-.1,.05) .. ++(-0.6,-0.1) ..++(-0.1,-0.4) ..++(0.2,-0.1);
-%         }
-%         \node[] (car_purple) at (car_purple_position) {\includegraphics[height=.75cm,angle=90]{neocampus/car_purple}};
+              %               \node[above right=.9cm of car_red] (car_purple_position) {};
+              %               \onslide<3->{
+              %               \path[draw,use Hobby shortcut,closed=true,violet!50!white,fill=violet!50!white,opacity=0.75]
+              %               ($(car_purple_position)+(.5,0)$) .. ++(-.3,.3) .. ++(-.1,.05) .. ++(-0.6,-0.1) ..++(-0.1,-0.4) ..++(0.2,-0.1);
+              %               }
+              %               \node[] (car_purple) at (car_purple_position) {\includegraphics[height=.75cm,angle=90]{neocampus/car_purple}};
 
-%         \node[above left=-.2cm and 1cm of car_purple] (car_brown_position) {};
-%         \onslide<3->{
-%           \path[draw,use Hobby shortcut,closed=true,olive!50!white,fill=olive!50!white,opacity=0.75]
-%           ($(car_brown_position)+(.2,-.5)$) .. ++(.1,.5) .. ++(-.04,.4) .. ++(-0.5,-0.3);}
-%         \node (car_brown) at (car_brown_position) {\includegraphics[height=.75cm]{neocampus/car_brown}};
-%       \end{tikzpicture}
-%     }
+              %               \node[above left=-.2cm and 1cm of car_purple] (car_brown_position) {};
+              %               \onslide<3->{
+              %               \path[draw,use Hobby shortcut,closed=true,olive!50!white,fill=olive!50!white,opacity=0.75]
+              %               ($(car_brown_position)+(.2,-.5)$) .. ++(.1,.5) .. ++(-.04,.4) .. ++(-0.5,-0.3);}
+              %               \node (car_brown) at (car_brown_position) {\includegraphics[height=.75cm]{neocampus/car_brown}};
+              %               \end{tikzpicture}
+              %               }
 
-%   \end{minipage}
-% \end{frame}
+              %               \end{minipage}
+              %               \end{frame}
 
-% \begin{frame}{Portrait post-doc LAAS}
-%   \hypertarget<4->{postdoc}{}
-%   \begin{minipage}{.6\textwidth}
-%     \begin{overlayarea}{\textwidth}{4cm}
-%       \begin{itemize}[<+->]
-%         \item Plateforme \autOCampus:
-%               \begin{itemize}[<+->]
-%                 \item<.-> localisation relative garantie
-%                 \item tests avec \textbf{droïdes livreurs}\footnotemark\tikzmark{droids}
-%               \end{itemize}
-%         \item[\hyperlink{ensembles_garantis}{\beamergotobutton{plus}}] Algorithme d'estimation d'ensembles garantis\footnotemark
-%         \item Développement d'un \textbf{démonstrateur}\tikzmark{demo}
-%         \item Améliorations du filtre\footnotemark\
-%               \begin{itemize}[<.(1)->]
-%                 \item Implémentation en C++ et intégration ROS
-%                 \item Capteurs incertains (asynchrones)
-%                 \item Analyse d'atteignabilité pour réduire volumes
-%               \end{itemize}
-%       \end{itemize}
+              %               \begin{frame}{Portrait post-doc LAAS}
+              %               \hypertarget<4->{postdoc}{}
+              %               \begin{minipage}{.6\textwidth}
+              %               \begin{overlayarea}{\textwidth}{4cm}
+              %               \begin{itemize}[<+->]
+              %         \item Plateforme \autOCampus:
+              %               \begin{itemize}[<+->]
+              %         \item<.-> localisation relative garantie
+              %         \item tests avec \textbf{droïdes livreurs}\footnotemark\tikzmark{droids}
+              %       \end{itemize}
+              %         \item[\hyperlink{ensembles_garantis}{\beamergotobutton{plus}}] Algorithme d'estimation d'ensembles garantis\footnotemark
+              %         \item Développement d'un \textbf{démonstrateur}\tikzmark{demo}
+              %         \item Améliorations du filtre\footnotemark\
+              %               \begin{itemize}[<.(1)->]
+              %         \item Implémentation en C++ et intégration ROS
+              %         \item Capteurs incertains (asynchrones)
+              %         \item Analyse d'atteignabilité pour réduire volumes
+              %       \end{itemize}
+              %       \end{itemize}
 
-%     \end{overlayarea}
-%   \end{minipage}
-%   \hspace{1cm}
-%   \begin{minipage}{.3\textwidth}
-%     \centering
-%     \scalebox{0.75}{
-%       \begin{tikzpicture}
-%         \node[alt=<{3-}>{opacity=0.2}] (0,0) {\includegraphics[width=4.5cm]{neocampus/crossroad.png}};
+              %               \end{overlayarea}
+              %               \end{minipage}
+              %               \hspace{1cm}
+              %               \begin{minipage}{.3\textwidth}
+              %               \centering
+              %               \scalebox{0.75}{
+              %               \begin{tikzpicture}
+              %               \node[alt=<{3-}>{opacity=0.2}] (0,0) {\includegraphics[width=4.5cm]{neocampus/crossroad.png}};
 
-%         \node (car_red) at (0.25,-1) {\includegraphics[height=.75cm]{neocampus/car_red}};
+              %               \node (car_red) at (0.25,-1) {\includegraphics[height=.75cm]{neocampus/car_red}};
 
-%         \node[above right=.9cm of car_red] (car_purple_position) {};
-%         \onslide<3->{
-%           \path[draw,use Hobby shortcut,closed=true,violet!50!white,fill=violet!50!white,opacity=0.75]
-%           ($(car_purple_position)+(.5,0)$) .. ++(-.3,.3) .. ++(-.1,.05) .. ++(-0.6,-0.1) ..++(-0.1,-0.4) ..++(0.2,-0.1);
-%         }
-%         \node[] (car_purple) at (car_purple_position) {\includegraphics[height=.75cm,angle=90]{neocampus/car_purple}};
+              %               \node[above right=.9cm of car_red] (car_purple_position) {};
+              %               \onslide<3->{
+              %               \path[draw,use Hobby shortcut,closed=true,violet!50!white,fill=violet!50!white,opacity=0.75]
+              %               ($(car_purple_position)+(.5,0)$) .. ++(-.3,.3) .. ++(-.1,.05) .. ++(-0.6,-0.1) ..++(-0.1,-0.4) ..++(0.2,-0.1);
+              %               }
+              %               \node[] (car_purple) at (car_purple_position) {\includegraphics[height=.75cm,angle=90]{neocampus/car_purple}};
 
-%         \node[above left=-.2cm and 1cm of car_purple] (car_brown_position) {};
-%         \onslide<3->{
-%           \path[draw,use Hobby shortcut,closed=true,olive!50!white,fill=olive!50!white,opacity=0.75]
-%           ($(car_brown_position)+(.2,-.5)$) .. ++(.1,.5) .. ++(-.04,.4) .. ++(-0.5,-0.3);}
-%         \node (car_brown) at (car_brown_position) {\includegraphics[height=.75cm]{neocampus/car_brown}};
-%       \end{tikzpicture}
-%     }
-%     \onslide<4->{
-%       \vspace{.25cm}
+              %               \node[above left=-.2cm and 1cm of car_purple] (car_brown_position) {};
+              %               \onslide<3->{
+              %               \path[draw,use Hobby shortcut,closed=true,olive!50!white,fill=olive!50!white,opacity=0.75]
+              %               ($(car_brown_position)+(.2,-.5)$) .. ++(.1,.5) .. ++(-.04,.4) .. ++(-0.5,-0.3);}
+              %               \node (car_brown) at (car_brown_position) {\includegraphics[height=.75cm]{neocampus/car_brown}};
+              %               \end{tikzpicture}
+              %               }
+              %               \onslide<4->{
+              %               \vspace{.25cm}
 
-%       \begin{tikzpicture}[remember picture]
-%         \clip[] (0,0) circle (1.5cm);
-%         \node[inner sep=0.cm] (qbot) {\includegraphics[angle=-90,width=3cm]{neocampus/qbot3}};
-%       \end{tikzpicture}
-%     }
+              %               \begin{tikzpicture}[remember picture]
+              %               \clip[] (0,0) circle (1.5cm);
+              %               \node[inner sep=0.cm] (qbot) {\includegraphics[angle=-90,width=3cm]{neocampus/qbot3}};
+              %               \end{tikzpicture}
+              %               }
 
-%   \end{minipage}
-%   \onslide<2->{\begin{tikzpicture}[overlay, remember picture]
-%       \draw[->,decorate,thick] (droids.east) to[out=0,in=90,] ++(1,1) node[above right,text=black,align=center,inner sep=0cm] {\includegraphics[width=0.2\textwidth]{neocampus/twinswheel.png}};
-%     \end{tikzpicture}}
-%   \onslide<4->{\begin{tikzpicture}[overlay, remember picture]
-%       \draw[->,decorate,thick] (demo.east) to[out=0,in=135,] ($(qbot.center) + (-.75*1.4-0.1,.75*1.4+0.1)$);
-%     \end{tikzpicture}}
-% 	\addtocounter{footnote}{-2}
-%   \footnotetext<2->{Collaboration avec équipe RAP du LAAS/CNRS, IRIT et Soben.} \addtocounter{footnote}{1}
-%   \footnotetext<3->{Collaboration avec la SATT Toulouse Tech Transfer.}	\addtocounter{footnote}{1}
-%   \footnotetext<5->{Article de conférence soumis et de journal en préparation.}
-% \end{frame}
+              %               \end{minipage}
+              %               \onslide<2->{\begin{tikzpicture}[overlay, remember picture]
+              %               \draw[->,decorate,thick] (droids.east) to[out=0,in=90,] ++(1,1) node[above right,text=black,align=center,inner sep=0cm] {\includegraphics[width=0.2\textwidth]{neocampus/twinswheel.png}};
+              %               \end{tikzpicture}}
+              %               \onslide<4->{\begin{tikzpicture}[overlay, remember picture]
+              %               \draw[->,decorate,thick] (demo.east) to[out=0,in=135,] ($(qbot.center) + (-.75*1.4-0.1,.75*1.4+0.1)$);
+              %               \end{tikzpicture}}
+              %               \addtocounter{footnote}{-2}
+              %               \footnotetext<2->{Collaboration avec équipe RAP du LAAS/CNRS, IRIT et Soben.} \addtocounter{footnote}{1}
+              %               \footnotetext<3->{Collaboration avec la SATT Toulouse Tech Transfer.}	\addtocounter{footnote}{1}
+              %               \footnotetext<5->{Article de conférence soumis et de journal en préparation.}
+              %               \end{frame}
 
 \begin{frame}{Usual solution: KF based algorithms}
 
@@ -211,34 +211,34 @@
   \end{minipage}
   \hfill
   \onslide<4->{
-  \begin{minipage}[c]{.45\textwidth}
-    \resizebox*{!}{.4\paperheight}{
-    \begin{tikzpicture}[spy using outlines={circle, magnification=6, size=3cm, connect spies}]
-      \node {\includegraphics[width=0.7\textwidth]{real_position}};
-      \only<5->{\spy on (0.45,-1.3) in node at (3.5,-.7);}
-    \end{tikzpicture}}
-  \end{minipage}}
+    \begin{minipage}[c]{.45\textwidth}
+      \resizebox*{!}{.4\paperheight}{
+        \begin{tikzpicture}[spy using outlines={circle, magnification=6, size=3cm, connect spies}]
+          \node {\includegraphics[width=0.7\textwidth]{real_position}};
+          \only<5->{\spy on (0.45,-1.3) in node at (3.5,-.7);}
+        \end{tikzpicture}}
+    \end{minipage}}
 \end{frame}
 
 \begin{frame}{Alternative: Set Membership Filters}
 
   \vfill
   \begin{overlayarea}{\textwidth}{.45\paperheight}
-  \begin{itemize}[<+(1)->]
-    \item[+] Uncertainties are \tikzmarktext{bounded_node}{bounded}
-  \begin{tikzpicture}[overlay, remember picture]
-    \onslide<+(1)->{\draw[->,decorate,thick] ($(bounded_node.east) + (0.25,0.02)$) to[out=0,in=180,] ++(1.,.25) node[right,text=black,align=center,inner sep=0.1cm] {\small No assumptions on error distributions};}
-    \onslide<+(1)->{\draw[->,decorate,thick] ($(bounded_node.east) + (0.25,-0.02)$) to[out=0,in=180,] ++(1.,-.1) node[right,text=black,align=center,inner sep=0.1cm] {\small Formal guarantees by definition!};}
-  \end{tikzpicture}
-    \item[-] Sets may be difficult to calculate \onslide<+(1)->{$\to$ high dimensionality, non-linearities}
-    \begin{itemize}
-      \item Solution: Approximate by known sets \structure<+(1)->{(tradeoff computing vs.\ conservatism)}
+    \begin{itemize}[<+(1)->]
+      \item[+] Uncertainties are \tikzmarktext{bounded_node}{bounded}
+            \begin{tikzpicture}[overlay, remember picture]
+              \onslide<+(1)->{\draw[->,decorate,thick] ($(bounded_node.east) + (0.25,0.02)$) to[out=0,in=180,] ++(1.,.25) node[right,text=black,align=center,inner sep=0.1cm] {\small No assumptions on error distributions};}
+              \onslide<+(1)->{\draw[->,decorate,thick] ($(bounded_node.east) + (0.25,-0.02)$) to[out=0,in=180,] ++(1.,-.1) node[right,text=black,align=center,inner sep=0.1cm] {\small Formal guarantees by definition!};}
+            \end{tikzpicture}
+      \item[-] Sets may be difficult to calculate \onslide<+(1)->{$\to$ high dimensionality, non-linearities}
             \begin{itemize}
-              \item Quick but conservative: {\color<+(1)>{green!50!black}{intervals}}, {\color<+(1)>{blue!50!white}{ellipsoids}}, {\color<+(1)>{olive!50!white}{zonotopes}}
-              \item Slow but tight (usually calculated offline): \alert<+(1)>{subpavings (SIVIA)}, {\color<+(1)>{neocampus_yellow}{polytopes}}
+              \item Solution: Approximate by known sets \structure<+(1)->{(tradeoff computing vs.\ conservatism)}
+                    \begin{itemize}
+                      \item Quick but conservative: {\color<+(1)>{green!50!black}{intervals}}, {\color<+(1)>{blue!50!white}{ellipsoids}}, {\color<+(1)>{olive!50!white}{zonotopes}}
+                      \item Slow but tight (usually calculated offline): \alert<+(1)>{subpavings (SIVIA)}, {\color<+(1)>{neocampus_yellow}{polytopes}}
+                    \end{itemize}
+              \item Constrained Zonotopes (\cz)\only<.(1)->{\footnote{\articlesymbol\ \cite{scott2016constrained}}} --- another representation of polytopes
             \end{itemize}
-      \item Constrained Zonotopes (\cz)\only<.(1)->{\footnote{\articlesymbol\ \cite{scott2016constrained}}} --- another representation of polytopes
-    \end{itemize}
     \end{itemize}
   \end{overlayarea}
 
@@ -290,21 +290,21 @@
 \begin{frame}{Gap and Contribution}
   \vfill
   \begin{itemize}[<+(1)->]
-      \item[{\color{lockyellow} \faLock}] No \smfshort\ takes into account observation time uncertainties
-    \end{itemize}
+    \item[{\color{lockyellow} \faLock}] No \smfshort\ takes into account observation time uncertainties
+  \end{itemize}
   \vfill
   \begin{itemize}[<+(1)->]
-      \item[{\color{lockgreen} \faKey}] An easily implementable \smfshort\ for nonlinear systems based on constrained zonotopes admitting \structure{asynchronous observations with uncertain observation times}.
-            \begin{itemize}
-              \item Base of the SMF algorithm was patented in Europe in 2019 (US patent in 2026)
-            \end{itemize}
-      \item<+(1)-> A benchmark study comparing the proposed filter with:
-            \begin{itemize}[<.(1)->]
-              \item[\articlesymbol] \iesmflong~\citep{Bolting2018b},
-              \item[\articlesymbol] \vsivialong\ \citep{herrero2012efficient},
-              \item \ekf.
-            \end{itemize}
-    \end{itemize}
+    \item[{\color{lockgreen} \faKey}] An easily implementable \smfshort\ for nonlinear systems based on constrained zonotopes admitting \structure{asynchronous observations with uncertain observation times}.
+          \begin{itemize}
+            \item Base of the SMF algorithm was patented in Europe in 2019 (US patent in 2026)
+          \end{itemize}
+    \item<+(1)-> A benchmark study comparing the proposed filter with:
+          \begin{itemize}[<.(1)->]
+            \item[\articlesymbol] \iesmflong~\citep{Bolting2018b},
+            \item[\articlesymbol] \vsivialong\ \citep{herrero2012efficient},
+            \item \ekf.
+          \end{itemize}
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Outline}
@@ -337,20 +337,20 @@
                             \end{smallmatrix}\right]
                             \right\rangle\tikzmark{plus_node}\\
     \alert<+(1)>{\set{Z}_a\cap_R \set{Z}_c}=&\left\langle
-                                               \left[\begin{smallmatrix}
-                                                 G_a&
-                                                      0
-                                               \end{smallmatrix}\right] ,\vec{c}_a, \left[\begin{smallmatrix}
-                                                 A_a & 0\\
-                                                 0   & A_c\\
-                                                 RG_a&  -G_c
-                                               \end{smallmatrix}\right],
-                                               \left[\begin{smallmatrix}
-                                                 \vec{b}_a\\
-                                                 \vec{b}_b\\
-                                                 \vec{c}_c-R\vec{c}_a
-                                               \end{smallmatrix}\right]
-                                               \right\rangle\tikzmark{cap_node}
+                                              \left[\begin{smallmatrix}
+                                                G_a&
+                                                     0
+                                              \end{smallmatrix}\right] ,\vec{c}_a, \left[\begin{smallmatrix}
+                                                A_a & 0\\
+                                                0   & A_c\\
+                                                RG_a&  -G_c
+                                              \end{smallmatrix}\right],
+                                              \left[\begin{smallmatrix}
+                                                \vec{b}_a\\
+                                                \vec{b}_b\\
+                                                \vec{c}_c-R\vec{c}_a
+                                              \end{smallmatrix}\right]
+                                              \right\rangle\tikzmark{cap_node}
   \end{align*}
 
   \begin{tikzpicture}[overlay, remember picture]
@@ -362,22 +362,22 @@
 
 \begin{frame}{Background}{Inclusion functions}
 
-Given a function $\vec{y} = \vec{h}(\vec{x})$,
-a set-valued linear function
-$\hat{\vec{y}} = \vec{y}_0 + H \vec{x} + \epsilon$
-is a \linearinclusionlong\ of $\vec{y}$ if
-$$\vec{y} \in \vec{y}_0 + H \vec{x} + [\set{\epsilon}], \forall \vec{x} \in \set{X}$$
+  Given a function $\vec{y} = \vec{h}(\vec{x})$,
+  a set-valued linear function
+  $\hat{\vec{y}} = \vec{y}_0 + H \vec{x} + \epsilon$
+  is a \linearinclusionlong\ of $\vec{y}$ if
+  $$\vec{y} \in \vec{y}_0 + H \vec{x} + [\set{\epsilon}], \forall \vec{x} \in \set{X}$$
 
-The set-valued solution $[\hat{\vec{y}}]$ always contains the nonlinear solution $\vec{y}$.
+  The set-valued solution $[\hat{\vec{y}}]$ always contains the nonlinear solution $\vec{y}$.
 
-\vfill
-\visible<+(1)->{aka Taylor Models when $[\set{\epsilon}]$ calculated using Lagrange remainders}
+  \vfill
+  \visible<+(1)->{aka Taylor Models when $[\set{\epsilon}]$ calculated using Lagrange remainders}
 \end{frame}
 
 \section{Problem Statement}
 
-\begin{frame}{Problem}{State Estimation}
-  \begin{block}{}
+\begin{frame}{Problem Statement}
+  \begin{block}{Set-based State Estimation}
     Given a system's state and observation dynamics,\\ compute regions ${\set{X}(t) \subset \mathbb{R}^n}$, such that $\vec{x}(t)\in\set{X}(t)$, $\forall t\geq0$.
   \end{block}
 \end{frame}
@@ -397,14 +397,14 @@ The set-valued solution $[\hat{\vec{y}}]$ always contains the nonlinear solution
   \begin{block}{Uncertain observations}
     $\vec{y}(t)\in\R^{m(t)}$
 
-      $
-      \begin{bmatrix}
-        \vec{y}(t) \\ \hat{t}_y(t)
-      \end{bmatrix} = \begin{bmatrix}
-          \vec{h}(\vec{x}(t), \vec{u}(t), t) + \alert<+(1)->{\vec{w}(t)} \\
-          t + \alert<.(1)->{w_t(t)}
-        \end{bmatrix}%\\
-      \to$\onslide<+(1)->{\footnote{\onslide<.(1)->{\articlesymbol\ \cite{scott2016constrained}}}}$\onslide<+(1)->{ \overbrace{
+    $
+    \begin{bmatrix}
+      \vec{y}(t) \\ \hat{t}_y(t)
+    \end{bmatrix} = \begin{bmatrix}
+      \vec{h}(\vec{x}(t), \vec{u}(t), t) + \alert<+(1)->{\vec{w}(t)} \\
+      t + \alert<.(1)->{w_t(t)}
+    \end{bmatrix}%\\
+    \to$\onslide<+(1)->{\footnote{\onslide<.(1)->{\articlesymbol\ \cite{scott2016constrained}}}}$\onslide<+(1)->{ \overbrace{
         \begin{bmatrix}
           {y}_i(t) \\
           \hat{t}_y(t)
@@ -414,7 +414,7 @@ The set-valued solution $[\hat{\vec{y}}]$ always contains the nonlinear solution
           h_i(\vec{x}(t), \vec{u}(t), t) &+& w_{i}(t) \\
           t &+& w_t(t)
         \end{bmatrix}}^{\text{for each of the } m \text{ observations}}}
-$
+    $
   \end{block}
   
 \end{frame}
@@ -428,97 +428,103 @@ $
 
   \vfill
   \begin{minipage}{.45\linewidth}
-  \resizebox*{!}{.6\paperheight}{
-  \normalem
-  \begin{minipage}{1.6\linewidth}
-    \begin{algorithm2e}[H]
-\small
-\DontPrintSemicolon%
-\alert<+(1)>{$\post{\set{Z}_{\vec{x}}}(t_0)\gets$ Initialization, $k\gets 1$}\;
-    \Loop{}{
-    \alert<+(1)>{\propagation{
-      \uIf{$\sup(t_{k-1} - [t_{y,k}]) \leq \ubound{\Delta {t}}$ \tcp{Closeness}
- {\bf or} $[t_{y,k}] == [t_{y,k-1}]$ \tcp{Synchronicity}
-  }{
-    $\pre{\set{Z}}_{\vec{x}}(t_{k}) \gets \post{\set{Z}}_{\vec{x}}(t_{k-1})$\;
-  }\uElse{\scalebox{0.9}{
-    %Compute \linearinclusion\; %\eqref{eq:czesmf_propainlcusion}\;
-    $\pre{\set{Z}}_{\vec{x}}(t_{k}) \gets \textrm{Propagation} \left(\post{\set{Z}}_{\vec{x}}(t_{k-1}),{\set{Z}}_{\vec{u}}(t_{k-1})\right)$\;
-  }}}}
-\alert<+(1)>{$\upd{\set{Z}_{\vec{x}}}(t_k)\gets \textrm{Update}\left(\pre{\set{Z}}_{\vec{x}}(t_k),\vec{z}(t_k),\set{Z}_{\vec{u}}(t_k)\right)$}\;
-\alert<+(1)>{\reduction{
-  \uIf{$n_g(\set{Z}'_{\vec{x}}(t_k)) > \bar{n}_g$ \textit{or} $n_c(\set{Z}'_{\vec{x}}(t_k)) > \bar{n}_c$}{
-    $\post{\set{Z}}_{\vec{x}}(t_{k})\gets\textrm{Reduction}\left({\set{Z}}'_{\vec{x}}(t_{k})\right)$
-  }\uElse{
-    $\post{\set{Z}}_{\vec{x}}(t_k) \gets \set{Z}'_{\vec{x}}(t_k)$
-  }
-    }}
-    $k\gets k+1$\;
-    }
+    \resizebox*{!}{.6\paperheight}{
+      \normalem
+      \begin{minipage}{1.6\linewidth}
+        \begin{algorithm2e}[H]
+          \small
+          \DontPrintSemicolon%
+          \alert<+(1)>{$\post{\set{Z}_{\vec{x}}}(t_0)\gets$ Initialization, $k\gets 1$}\;
+          \Loop{}{
+            \alert<+(1)>{\propagation{
+                \uIf{$\sup(t_{k-1} - [t_{y,k}]) \leq \ubound{\Delta {t}}$ \tcp{Closeness}
+                  {\bf or} $[t_{y,k}] == [t_{y,k-1}]$ \tcp{Synchronicity}
+                }{
+                  $\pre{\set{Z}}_{\vec{x}}(t_{k}) \gets \post{\set{Z}}_{\vec{x}}(t_{k-1})$\;
+                }\uElse{\scalebox{0.9}{
+                    % Compute \linearinclusion\; %\eqref{eq:czesmf_propainlcusion}\;
+                    $\pre{\set{Z}}_{\vec{x}}(t_{k}) \gets \textrm{Propagation} \left(\post{\set{Z}}_{\vec{x}}(t_{k-1}),{\set{Z}}_{\vec{u}}(t_{k-1})\right)$\;
+                  }}}}
+            \alert<+(1)>{$\upd{\set{Z}_{\vec{x}}}(t_k)\gets \textrm{Update}\left(\pre{\set{Z}}_{\vec{x}}(t_k),\vec{z}(t_k),\set{Z}_{\vec{u}}(t_k)\right)$}\;
+            \alert<+(1)>{\reduction{
+                \uIf{$n_g(\set{Z}'_{\vec{x}}(t_k)) > \bar{n}_g$ \textit{or} $n_c(\set{Z}'_{\vec{x}}(t_k)) > \bar{n}_c$}{
+                  $\post{\set{Z}}_{\vec{x}}(t_{k})\gets\textrm{Reduction}\left({\set{Z}}'_{\vec{x}}(t_{k})\right)$
+                }\uElse{
+                  $\post{\set{Z}}_{\vec{x}}(t_k) \gets \set{Z}'_{\vec{x}}(t_k)$
+                }
+              }}
+            $k\gets k+1$\;
+          }
 
-  \caption{\small Constrained Zonotope Extended SMF (CZESMF)}
-  \label{alg:czesmf_resume}
-\end{algorithm2e}
-\ULforem
-\end{minipage}
-}
-\end{minipage}
-\hfill
-\begin{minipage}{.45\linewidth}
-  Predict and Correct
-  \begin{itemize}[<+(-3)->]
-    \item Initialization
-    \item Conditional propagation
-    \item Update
-    \item Conditional reduction
-  \end{itemize}
-\end{minipage}
+          \caption{\small Constrained Zonotope Extended SMF (CZESMF)}
+          \label{alg:czesmf_resume}
+        \end{algorithm2e}
+        \ULforem
+      \end{minipage}
+    }
+  \end{minipage}
+  \hfill
+  \begin{minipage}{.45\linewidth}
+    Predict and Correct
+    \begin{itemize}[<+(-3)->]
+      \item Initialization
+      \item Conditional propagation $\pre{\set{Z}}_{\vec{x}} (t_{k})$
+      \item Update $\upd{\set{Z}_{\vec{x}}}(t_k)$
+      \item Conditional reduction $\post{\set{Z}}_{\vec{x}} (t_{k})$
+    \end{itemize}
+  \end{minipage}
 \end{frame}
 
 \begin{frame}{Initialization}
   \vfill
-The least conservative the better $\to$ during iterations sets tend to increase (wrapping effect)
+  The least conservative the better $\to$ during iterations sets tend to increase (wrapping effect)
 
   \vfill
-E.g.: Initial paving by (V)SIVIA and then take the {\color{red}\czshort-hull} (or {\color{green!50!black} interval hull})
+  E.g.: Initial paving by (V)SIVIA and then take the {\color{red}\czshort-hull} (or {\color{green!50!black} interval hull})
 
   \centering
-\includegraphics[width=.3\linewidth]{vsivia_initial_example.pdf}
-\includegraphics[width=.3\linewidth]{vsivia_initial_example_zonotope.pdf}
+  \includegraphics[width=.3\linewidth]{vsivia_initial_example.pdf}
+  \includegraphics[width=.3\linewidth]{vsivia_initial_example_zonotope.pdf}
 
 \end{frame}
 
 \begin{frame}{Conditional propagation}
 
-\begin{align*}
-  \vec{x}(t_{k+1}) = \vec{f}\left(\vec{x}(t_{k}),\vec{u}(t_{k}), t_{k+1}, t_{k}\right) + \vec{q}(t_{k})
-\end{align*}
-\small linearized around ${\bar{\vec{o}}(t_{k})=(\bar{\vec{x}}(t_{k}),\bar{\vec{u}}(t_{k}))}$,\\ where ${\bar{\vec{x}} (t_{k}) = \imid{[\post{\set{Z}}_{\vec{x}} (t_{k-1})]}}$ and %\\
-  ${\bar{\vec{u}} (t_{k}) = \imid{[\post{\set{Z}}_{\vec{u}} (t_{k-1})]}}$.
+  \begin{align*}
+    \vec{x}(t_{k+1}) = \vec{f}\left(\vec{x}(t_{k}),\vec{u}(t_{k}), t_{k}, t_{k+1}\right) + \vec{q}(t_{k})
+  \end{align*}
+  \pause
+  \small linearized around ${\bar{\vec{o}}(t_{k})=(\bar{\vec{x}}(t_{k}),\bar{\vec{u}}(t_{k}))}$,\\ \onslide<+(1)->{where ${\bar{\vec{x}} (t_{k}) = \imid{[\post{\set{Z}}_{\vec{x}} (t_{k-1})]}}$ and %\\
+    ${\bar{\vec{u}} (t_{k}) = \imid{[\post{\set{Z}}_{\vec{u}} (t_{k-1})]}}$.}
 
-\normalsize
-\begin{align*}
-  \vec{x}(t_{k+1}) = F_{\vec{x}}(t_{k}) \vec{x}(t_{k})
-  + F_{\vec{u}}(t_{k}) \vec{u}(t_{k})
-  + \vec{\epsilon}_f(t_{k})
-  + \vec{c}_f(t_{k}),
-  + \vec{q}(t_{k})
-\end{align*}
-\small where  ${\vec{c}_f(t_{k}) =
-  \vec{f}(\bar{\vec{o}}(t_{k}), t_{k-1}, t_{k})
-  - F_{\vec{x}}(t_{k}) \bar{\vec{x}}(t_{k})
-  - F_{\vec{u}}(t_{k}) \bar{\vec{u}}(t_{k})}$, ${F_{\vec{x}}(t_k) =  \vec{f}_{\vec{x}}(\bar{\vec{o}})}$, ${F_{\vec{u}}(t_k) =  \vec{f}_{\vec{u}}(\bar{\vec{o}})}$,
- ${\vec{\epsilon}_{\vec{f}}(t_k) \in [\vec{\epsilon}_{\vec{f}}(t_k)]}$ is the lumped linearization error,
-\normalsize
+  \pause
+  \normalsize
+  \begin{align*}
+    \vec{x}(t_{k+1}) = \alert<+(1)>{F_{\vec{x}}(t_{k}) \vec{x}(t_{k})}
+    + \alert<+(1)>{F_{\vec{u}}(t_{k}) \vec{u}(t_{k})}
+    + \alert<+(1)>{\vec{c}_f(t_{k})}
+    + \alert<+(1)>{\vec{\epsilon}_f(t_{k})}
+    + \vec{q}(t_{k})
+  \end{align*}
+  \small where
+  \onslide<.(-2)->{${F_{\vec{x}}(t_k) =  \vec{f}_{\vec{x}}(\bar{\vec{o}})}$, ${F_{\vec{u}}(t_k) =  \vec{f}_{\vec{u}}(\bar{\vec{o}})}$},
 
-\begin{align*}
-  \pre{\set{Z}}_{\vec{x}} (t_k) =
-                      F_{\vec{x}}(t_{k-1}) \post{\set{Z}}_{\vec{x}} (t_{k-1})
-                      +F_{\vec{u}}(t_{k-1}) \set{Z}_{\vec{u}} (t_{k-1})
-                      + \set{Z}([\vec{\epsilon}_{\vec{f}}(t_{k-1})])
-                      + \vec{c}_{\vec{f}} (t_{k-1})
-                      + \set{Z}_{\vec{q}} (t_{k-1})
-\end{align*}
+  \onslide<.->{${\vec{c}_f(t_{k}) =
+      \vec{f}(\bar{\vec{o}}(t_{k}), t_{k-1}, t_{k})
+      - F_{\vec{x}}(t_{k}) \bar{\vec{x}}(t_{k})
+      - F_{\vec{u}}(t_{k}) \bar{\vec{u}}(t_{k})}$,}\\
+  \onslide<.(1)->{${\vec{\epsilon}_{\vec{f}}(t_k) \in [\vec{\epsilon}_{\vec{f}}(t_k)]}$ is the lumped linearization error}
+
+  \pause
+  \normalsize
+  \begin{align*}
+    \pre{\set{Z}}_{\vec{x}} (t_k) =
+    F_{\vec{x}}(t_{k-1}) \post{\set{Z}}_{\vec{x}} (t_{k-1})
+    +F_{\vec{u}}(t_{k-1}) \set{Z}_{\vec{u}} (t_{k-1})
+    + \set{Z}([\vec{\epsilon}_{\vec{f}}(t_{k-1})])
+    + \vec{c}_{\vec{f}} (t_{k-1})
+    + \set{Z}_{\vec{q}} (t_{k-1})
+  \end{align*}
 
 \end{frame}
 
@@ -526,72 +532,200 @@ E.g.: Initial paving by (V)SIVIA and then take the {\color{red}\czshort-hull} (o
   \vfill
   \begin{align*}
     {y}(t_k) \in\,
-    \alert<+(1)>{H_{\vec{x}}(t_k)
-    \set{Z}_{\vec{x}} (t_k)}
-    + \alert<+(1)>{H_{\vec{u}}(t_k)
-    \set{Z}_{\vec{u}} (t_k)}
-    + \alert<+(1)>{\set{Z}([c_{\vec{h}} (t_k)])}
-    + \alert<+(1)>{\set{Z}([\epsilon_{\vec{h}} (t_k)])}.
-  \end{align*}
-linearized around ${\bar{\vec{x}} (t_{k}) = \imid{[\pre{\set{Z}}_{\vec{x}} (t_{k})]}}$
- and
-${\bar{\vec{u}} (t_{k}) = \imid{[\pre{\set{Z}}_{\vec{u}} (t_{k})]}}$,
-
-  \onslide<+(1)->{
-  \begin{align*}
-    \vec{x}(t) \in \pre{\set{Z}}_{\vec{x}} (t_k) + \alert<+(1)>{\set{Z}([\Delta \vec{x}(t_k)])}
-    \text{, if }t \in t_{k} + [t_{y,k}]
-  \end{align*}}
-\vspace{-.5cm}
-  \onslide<+(1)->{
-  \begin{align*}
-    \vec{y} ([t_{y,k}]) \in H_{\vec{x}}(t_k)
-    \set{Z}_{\vec{x}}(t_k)
-    + \set{Z}([\epsilon'] ),
-  \end{align*}
-    where {\footnotesize ${[\epsilon'] =
-    H_{\vec{u}}(t_k)
-    [\set{Z}_{\vec{u}} (t_k)]
-    + [\epsilon_{\vec{h}}(t_k)]
-    + [c_{\vec{h}}(t_k)]
-    + \alert<+(1)>{H_{\vec{x}}(t_k)
-    [\Delta \vec{x}]}}$}
-}
-
-  \onslide<+(1)->{
-  \begin{align*}
     H_{\vec{x}}(t_k)
     \set{Z}_{\vec{x}} (t_k)
-    \ni  \tikzmarktext{z_node}{$z(t_{y,k})$}
-    - \set{Z}([\epsilon']) =
-    \set{Z}([\epsilon])
-    \onslide<+(2)->{\to
-        \alert<+->{\set{Z}'_{\vec{x}}(t_{k})
-    =\,
-          \pre{\set{Z}}_{\vec{x}} (t_k)
-          \cap_{H_{\vec{x}}}
-          \set{Z}([\epsilon])}}
-  \end{align*}}
+    + H_{\vec{u}}(t_k)
+    \set{Z}_{\vec{u}} (t_k)
+    + \set{Z}([c_{\vec{h}} (t_k)])
+    + \set{Z}([\epsilon_{\vec{h}} (t_k)]).
+  \end{align*}
+  linearized around ${\bar{\vec{x}} (t_{k}) = \imid{[\pre{\set{Z}}_{\vec{x}} (t_{k})]}}$
+  and
+  ${\bar{\vec{u}} (t_{k}) = \imid{[\pre{\set{Z}}_{\vec{u}} (t_{k})]}}$,
+
+  \onslide<+(1)->{
+    \begin{align*}
+      \vec{x}(t) \in \pre{\set{Z}}_{\vec{x}} (t_k) + \alert<+(1)>{\tikzmarktext{delta_node}{$\set{Z}([\Delta \vec{x}(t_k)])$}}
+      \text{, if }t \in t_{k} + [t_{y,k}]
+    \end{align*}}
+  \vspace{-.5cm}
+  \onslide<+(1)->{
+    \begin{align*}
+      \vec{y} ([t_{y,k}]) \in H_{\vec{x}}(t_k)
+      \set{Z}_{\vec{x}}(t_k)
+      + \set{Z}([\epsilon'] ),
+    \end{align*}
+    where {\footnotesize ${[\epsilon'] =
+        H_{\vec{u}}(t_k)
+        [\set{Z}_{\vec{u}} (t_k)]
+        + [\epsilon_{\vec{h}}(t_k)]
+        + [c_{\vec{h}}(t_k)]
+        + \alert<+(1)>{\tikzmarktext{inflation_node}{$H_{\vec{x}}(t_k)
+            [\Delta \vec{x}]$}}}$}
+  }
+
+  \onslide<+(1)->{
+    \begin{align*}
+      H_{\vec{x}}(t_k)
+      \set{Z}_{\vec{x}} (t_k)
+      \ni  \tikzmarktext{z_node}{$z(t_{y,k})$}
+      - \set{Z}([\epsilon']) =
+      \set{Z}([\epsilon])
+      \onslide<+(2)->{\to
+      \alert<+->{\set{Z}'_{\vec{x}}(t_{k})
+      =\,
+      \pre{\set{Z}}_{\vec{x}} (t_k)
+      \cap_{H_{\vec{x}}}
+      \set{Z}([\epsilon])}}
+    \end{align*}}
   \begin{tikzpicture}[overlay, remember picture]
     \onslide<.->{\draw[->,decorate,thick] ($(z_node.north) + (0.25,0.02)$) to[out=90,in=180,] ++(1.,.4) node[right,text=black,align=center,inner sep=0.1cm] {\small Scalar observation};}
+    \onslide<.(-4)->{\draw[->,decorate,thick] ($(delta_node.north) + (0.25,0.02)$) to[out=90,in=180,] ++(1.,.4) node[right,text=black,align=center,inner sep=0.1cm] {\small due to observation error!};}
 
+    \onslide<.(-2)->{\draw[->,decorate,thick] ($(inflation_node.north) + (0.25,0.02)$) to[out=90,in=180,] ++(1.5,.2) node[right,text=black,align=center,inner sep=0.1cm] {\small Inflation to compensate \\observation error!};}
   \end{tikzpicture}
 \end{frame}
 
 \begin{frame}{Conditional reduction}
 
+  \vfill
+  \centering
+  \only<1>{
+  \resizebox*{!}{0.7\paperheight}{
+    \def\svgwidth{1.2\linewidth}
+    \import{../img/}{czesmf_prior_and_posterior_10_2_latex.pdf_tex}
+  }
+  }
+  \only<2->{
+    \begin{tikzpicture}[spy using outlines={circle, magnification=8, size=3cm, connect spies}]
+    \node at (0,0) {
+  \includegraphics[height=.7\paperheight]{czesmf_prior_and_posterior_10_2_latex.pdf}
+    };
+   \spy[red] on (-1.05,2.3)
+in node at (-.6,-1.25);
+\end{tikzpicture}
+}
+\end{frame}
+
+\begin{frame}{Sets in CZESMF}
+
+  \vfill
+  \centering
+  \resizebox*{!}{.7\paperheight}{
+    \def\svgwidth{1.2\linewidth}
+    \import{../img/}{czesmf_prior_and_posterior_10_latex.pdf_tex}}%
 \end{frame}
 
 \section{Examples}
 
-\subsection{1D Example --- Platooning}
+\subsection{1D Example --- Platooning {\color{red} \faBan}}
+\subsection{2D Example --- Vehicle tracking in urban traffic roads {\color{lockgreen}\faCheck}}
+
+\begin{frame}{2D Example}{Vehicle tracking in urban traffic roads}
+
+  \vfill
+  \centering
+  \includegraphics[height=.7\paperheight,clip,trim=0 10 0 30]{../img/trajectory_initial_form3.pdf}
+  \label{fig:mn_trajectory_initial}
+\end{frame}
+
+\begin{frame}{Vehicle tracking}{Initialization}
+
+  \vfill
+  \centering
+  \includegraphics[height=.7\paperheight,clip,trim=0 0 0 15]{../img/3beacons_form3_obstimrad0.01_czesmf_results_vsivia.pdf}
+\end{frame}
+
+\begin{frame}{Vehicle tracking}{Volume comparison}
+  \begin{figure}[tb]
+\centering
+  \begin{subfigure}{.45\linewidth}
+  \centering
+  \includegraphics[width=1.2\linewidth,clip,trim=0 0 0 35]{../img/comparison_volumes_czesmf_ekf_obstimrad0.01_form3_no_chartjunk.pdf}
+  \caption{Timing noise $\qty{0.01}{\s}$. }\label{fig:mn_trajectory_ekf_vs_cz_volume_001}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{.45\linewidth}
+  \centering
+  \includegraphics[width=1.2\linewidth,clip,trim=0 0 0 35]{../img/comparison_volumes_czesmf_ekf_obstimrad0.1_form3_no_chartjunk.pdf}
+  \caption{Timing noise $\qty{0.1}{\s}$.}\label{fig:mn_trajectory_ekf_vs_cz_volume_01}
+  \end{subfigure}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Vehicle tracking}{Inclusion of real trajectory}
+\begin{figure}[tb]
+  \centering
+  \begin{subfigure}{.4\linewidth}
+  \centering
+  \includegraphics[width=\linewidth,clip,trim=0 4 0 14]{../img/comparison_czesmf_ekf_obstimrad0.01_form3.pdf}
+  \caption{Timing noise $\qty{0.01}{\second}$}
+  \label{fig:mn_trajectory_ekf_vs_cz__001}
+  \end{subfigure}
+  \begin{subfigure}{.4\linewidth}
+  \centering
+ \includegraphics[width=\linewidth,clip,trim=0 4 0 14]{../img/comparison_czesmf_ekf_obstimrad0.5_form3.pdf}
+  \caption{Timing noise $\qty{0.5}{\second}$}
+  \label{fig:mn_trajectory_ekf_vs_cz_05}
+  \end{subfigure}
+\begin{subfigure}{\linewidth}
+  \centering
+  \includegraphics[width=.7\linewidth,clip,trim=0 5 0 11]{../img/comparison_czesmf_ekf_obstimrad0.5_form3_detail_1.pdf}
+  \caption{Detail of (b)}
+  \label{fig:mn_trajectory_ekf_vs_cz_05_detail}
+\end{subfigure}
+
+  % \caption{Estimated sets (some omitted for readability). Timing noises $\qty{0.01}{\second}$ (a) and $\qty{0.5}{\second}$ (b). (c) details (b) for $t_{31}=10\unit{\s}$.
+  \vspace{-0.2cm}
+  \caption{Estimated sets selected for readability.
+}\label{fig:mn_trajectory_ekf_vs_cz_001_05}
+\end{figure}
+\end{frame}
 
 \begin{frame}
+  \begin{table}[bt]
+  \caption{Mean execution times ($\unit{\ms}$) for different observation time errors.}\label{tab:comparison_time}
+  \centering
+  \scalebox{0.9}{
+  \begin{tabular}[b]{c|cccc}
+    \toprule
+    \input{../article/timing_comparison}
+    \\ \bottomrule
+  \end{tabular}
+  }
+\end{table}
+\end{frame}
+
+
+\section{Conclusion}
+
+\begin{frame}[plain]
+  \endpage%
+  % \vfill
+  \centering
+  \begin{minipage}[t]{.5\linewidth}
+    \small
+    \centering
+    {
+      \usebeamercolor[fg]{title}Questions?
+
+      \vspace{.5cm}
+      \href{mailto:r.nogueira@univ-angers.fr?subject=Presentation IFAC WC 2026}{r.nogueira@univ-angers.fr}
+
+      \vspace{.5cm}
+      \qrcode[hyperlink]{mailto:r.nogueira@univ-angers.fr?subject=Presentation\ IFAC\ WC\ 2026}
+    }
+  \end{minipage}
+\end{frame}
+
+\appendix
+
+\begin{frame}{1D Platooning}
   \begin{figure}[b!]
     \centering
     %	\caption{1D example: state trajectory and enclosures.}	\label{fig:mn1_trajectory}
     % \begin{subfigure}{\linewidth}
-    %  \centering
+    %   \centering
     \includegraphics[width=.5\linewidth]{mn1_trajectory}
 
     \includegraphics[width=.2\linewidth]{mn1_p}
@@ -609,43 +743,6 @@ ${\bar{\vec{u}} (t_{k}) = \imid{[\pre{\set{Z}}_{\vec{u}} (t_{k})]}}$,
     \label{fig:mn1_p_and_v}
   \end{figure}
 \end{frame}
-\subsection{2D Example --- Vehicle tracking in urban traffic roads}
-
-\begin{frame}{Zonotope contraint: \hyperlink{postdoc}{\beamerreturnbutton{retour}}}
-  \vfill
-    \centering
-    \begin{itemize}
-      \item Propriétés similaires au polytopes\\
-            (Clos pour l'intersection et somme de Minkowski)
-            \begin{itemize}[<+(1)->]
-              \item[+] Répresentation facilite exécution des opérations
-              \item[+] Asymétrie $\to$ plus de liberté
-              \item[+] Facilement appliquable pour des systèmes linéaires
-              \item[-] Chaque opération augmente la complexité \\(réduction possible au détriment du volume)
-            \end{itemize}
-    \end{itemize}
-
-    \begin{minipage}[c]{.45\linewidth}
-      \centering
-      \scalebox{3}{
-        \begin{tikzpicture}
-          % \draw [help lines] (-1,-1) grid [step=.1cm] (1,1);
-          \node[] (car_purple_position) {};
-
-          % constrained zonotope
-          \draw[neocampus_yellow,fill=neocampus_yellow] (-0.65,-0.1) -- ++(90:0.2) -- ++(45:0.42) --++(0:0.4) -- ++(-30:0.53) -- ++(-90:0.32) -- ++(210:0.28) --++(180:0.45) --++(160:0.49) -- cycle;
-
-          \path[draw,use Hobby shortcut,closed=true,violet!50!white]
-          % \path[draw,use Hobby shortcut,closed=true,violet!50!white,fill=violet!50!white,opacity=0.5]
-          ($(car_purple_position)+(.5,0)$) .. ++(-.3,.3) .. ++(-.1,.05) .. ++(-0.6,-0.1) ..++(-0.1,-0.4) ..++(0.2,-0.1);
-          \node[] (car_purple) at (car_purple_position) {\includegraphics[height=1cm,angle=90]{neocampus/car_purple}};
-
-        \end{tikzpicture}
-      }
-      \[\set{C}_{\set{Z}}=\setbuild{G\vec{\xi}+\vec{c}}{\norm{\vec{\xi}}_{\infty}\leq 1,A\vec{\xi}=\vec{b}}\]
-    \end{minipage}
-  \end{frame}
-
 
 \begin{frame}
 
@@ -664,34 +761,46 @@ ${\bar{\vec{u}} (t_{k}) = \imid{[\pre{\set{Z}}_{\vec{u}} (t_{k})]}}$,
   \begin{itemize}[<.->] \setbeamertemplate{itemize item}{\articlesymbol}
     \item
     \item[\booksymbol] Méthodes de sous-espace ensemblistes\small~\citeauthor{PaulaEtAl2025} \citeyear{PaulaEtAl2025}
-                    \setbeamertemplate{itemize item}{}
+          \setbeamertemplate{itemize item}{}
 
     \item
     \item
   \end{itemize}
 \end{frame}
 
-\section{Conclusion}
-
-\begin{frame}[plain]
-  \endpage%
-  % \vfill
+\begin{frame}{Zonotope contraint: \hyperlink{postdoc}{\beamerreturnbutton{retour}}}
+  \vfill
   \centering
-  \begin{minipage}[t]{.5\linewidth}
-    \small
+  \begin{itemize}
+    \item Propriétés similaires au polytopes\\
+          (Clos pour l'intersection et somme de Minkowski)
+          \begin{itemize}[<+(1)->]
+            \item[+] Répresentation facilite exécution des opérations
+            \item[+] Asymétrie $\to$ plus de liberté
+            \item[+] Facilement appliquable pour des systèmes linéaires
+            \item[-] Chaque opération augmente la complexité \\(réduction possible au détriment du volume)
+          \end{itemize}
+  \end{itemize}
+
+  \begin{minipage}[c]{.45\linewidth}
     \centering
-    {
-    \usebeamercolor[fg]{title}Questions?
+    \scalebox{3}{
+      \begin{tikzpicture}
+        % \draw [help lines] (-1,-1) grid [step=.1cm] (1,1);
+        \node[] (car_purple_position) {};
 
-    \vspace{.5cm}
-    \href{mailto:r.nogueira@univ-angers.fr?subject=Presentation IFAC WC 2026}{r.nogueira@univ-angers.fr}
+        % constrained zonotope
+        \draw[neocampus_yellow,fill=neocampus_yellow] (-0.65,-0.1) -- ++(90:0.2) -- ++(45:0.42) --++(0:0.4) -- ++(-30:0.53) -- ++(-90:0.32) -- ++(210:0.28) --++(180:0.45) --++(160:0.49) -- cycle;
 
-    \vspace{.5cm}
-    \qrcode[hyperlink]{mailto:r.nogueira@univ-angers.fr?subject=Presentation\ IFAC\ WC\ 2026}
+        \path[draw,use Hobby shortcut,closed=true,violet!50!white]
+        % \path[draw,use Hobby shortcut,closed=true,violet!50!white,fill=violet!50!white,opacity=0.5]
+        ($(car_purple_position)+(.5,0)$) .. ++(-.3,.3) .. ++(-.1,.05) .. ++(-0.6,-0.1) ..++(-0.1,-0.4) ..++(0.2,-0.1);
+        \node[] (car_purple) at (car_purple_position) {\includegraphics[height=1cm,angle=90]{neocampus/car_purple}};
+
+      \end{tikzpicture}
     }
+    \[\set{C}_{\set{Z}}=\setbuild{G\vec{\xi}+\vec{c}}{\norm{\vec{\xi}}_{\infty}\leq 1,A\vec{\xi}=\vec{b}}\]
   \end{minipage}
 \end{frame}
-
-\appendix
 
 \end{document}
