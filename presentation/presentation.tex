@@ -589,22 +589,24 @@
 \begin{frame}{Conditional reduction}
 
   \vfill
+  \begin{overlayarea}{\paperwidth}{.7\paperheight}
   \centering
   \only<1>{
-  \resizebox*{!}{0.7\paperheight}{
-    \def\svgwidth{1.2\linewidth}
+  % \resizebox*{!}{0.7\paperheight}{
+    \def\svgwidth{.45\linewidth}
     \import{../img/}{czesmf_prior_and_posterior_10_2_latex.pdf_tex}
-  }
-  }
+  % }
+  }%
   \only<2->{
     \begin{tikzpicture}[spy using outlines={circle, magnification=8, size=3cm, connect spies}]
-    \node at (0,0) {
-  \includegraphics[height=.7\paperheight]{czesmf_prior_and_posterior_10_2_latex.pdf}
-    };
-   \spy[red] on (-1.05,2.3)
-in node at (-.6,-1.25);
-\end{tikzpicture}
-}
+      \node[inner sep=0 cm] at (0,0) {
+        \includegraphics[width=.45\linewidth]{czesmf_prior_and_posterior_10_2_latex.pdf}
+      };
+      \spy[red] on (-1.15,2.6)
+      in node at (-.6,-1.25);
+    \end{tikzpicture}}%
+  \end{overlayarea}
+
 \end{frame}
 
 \begin{frame}{Sets in CZESMF}
