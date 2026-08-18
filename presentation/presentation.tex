@@ -300,12 +300,18 @@
           \end{itemize}
     \item<+(1)-> A benchmark study comparing the proposed filter with:
           \begin{itemize}[<.(1)->]
-            \item[\articlesymbol] \iesmflong~\citep{Bolting2018b},
-            \item[\articlesymbol] \vsivialong\ \citep{herrero2012efficient},
-            \item \ekf.
+            \item[\tikz{\draw[rotate=30,fill] (0,0) ellipse [x radius=5pt, y radius=3pt]; }] \iesmflong~\citep{Bolting2018b},
+            \item[\tikz{\fill[scale=0.3,red!70!white] (0,0) -- (1,0) -- (1,1) -- (0,1);
+    \draw[scale=0.3,] (0,0) -- (1,0) (0,0) -- (0,1) (1,0) -- (1,1) (0,1) -- (1,1);
+    \draw[scale=0.3,] (0,0) -- (.5,0) (0,0) -- (0,1) (.5,0) -- (.5,1) (0,1) -- (1,1);
+    \draw[scale=0.3,] (0.5,0.5) -- (1,0.5) (0.75,0.5) -- (0.75,1) (0.75,0.5) -- (0.75,0);
+    \fill[scale=0.3,lockgreen] (0.5,0.25) -- (.5,0.75) -- (0.75,0.75) -- (0.75,0.25);}] \vsivialong\ \citep{herrero2012efficient},
+            \item[\tikz{\draw[draw=none,inner color=auditionPrimary,rotate=40] (0,0) ellipse [x radius=5pt, y radius=3pt];}] \ekf.
           \end{itemize}
   \end{itemize}
+
 \end{frame}
+
 
 \begin{frame}{Outline}
   \vfill
@@ -623,7 +629,7 @@
 \subsection{1D Example --- Platooning {\color{red} \faBan}}
 \subsection{2D Example --- Vehicle tracking in urban traffic roads {\color{lockgreen}\faCheck}}
 
-\begin{frame}{2D Example}{Vehicle tracking in urban traffic roads}
+\begin{frame}{2D Example}{Vehicle tracking in urban traffic roads --- Different observation timing errors}
 
   \vfill
   \centering
@@ -638,7 +644,7 @@
   \includegraphics[height=.7\paperheight,clip,trim=0 0 0 15]{../img/3beacons_form3_obstimrad0.01_czesmf_results_vsivia.pdf}
 \end{frame}
 
-\begin{frame}{Vehicle tracking}{Volume comparison}
+\begin{frame}{Vehicle tracking}{Volume comparison for different timing noises}
   \begin{figure}[tb]
 \centering
   \begin{subfigure}{.45\linewidth}
@@ -646,7 +652,7 @@
   \includegraphics[width=1.2\linewidth,clip,trim=0 0 0 35]{../img/comparison_volumes_czesmf_ekf_obstimrad0.01_form3_no_chartjunk.pdf}
   \caption{Timing noise $\qty{0.01}{\s}$. }\label{fig:mn_trajectory_ekf_vs_cz_volume_001}
   \end{subfigure}
-  \hfill
+  \hspace{0.5cm}
   \begin{subfigure}{.45\linewidth}
   \centering
   \includegraphics[width=1.2\linewidth,clip,trim=0 0 0 35]{../img/comparison_volumes_czesmf_ekf_obstimrad0.1_form3_no_chartjunk.pdf}
@@ -656,35 +662,32 @@
 \end{frame}
 
 \begin{frame}{Vehicle tracking}{Inclusion of real trajectory}
-\begin{figure}[tb]
-  \centering
-  \begin{subfigure}{.4\linewidth}
-  \centering
-  \includegraphics[width=\linewidth,clip,trim=0 4 0 14]{../img/comparison_czesmf_ekf_obstimrad0.01_form3.pdf}
-  \caption{Timing noise $\qty{0.01}{\second}$}
-  \label{fig:mn_trajectory_ekf_vs_cz__001}
-  \end{subfigure}
-  \begin{subfigure}{.4\linewidth}
-  \centering
- \includegraphics[width=\linewidth,clip,trim=0 4 0 14]{../img/comparison_czesmf_ekf_obstimrad0.5_form3.pdf}
-  \caption{Timing noise $\qty{0.5}{\second}$}
-  \label{fig:mn_trajectory_ekf_vs_cz_05}
-  \end{subfigure}
-\begin{subfigure}{\linewidth}
-  \centering
-  \includegraphics[width=.7\linewidth,clip,trim=0 5 0 11]{../img/comparison_czesmf_ekf_obstimrad0.5_form3_detail_1.pdf}
-  \caption{Detail of (b)}
-  \label{fig:mn_trajectory_ekf_vs_cz_05_detail}
-\end{subfigure}
 
-  % \caption{Estimated sets (some omitted for readability). Timing noises $\qty{0.01}{\second}$ (a) and $\qty{0.5}{\second}$ (b). (c) details (b) for $t_{31}=10\unit{\s}$.
-  \vspace{-0.2cm}
-  \caption{Estimated sets selected for readability.
-}\label{fig:mn_trajectory_ekf_vs_cz_001_05}
-\end{figure}
+  \vspace{.5cm}
+  \begin{figure}[H]
+    \centering
+    \begin{subfigure}{.225\linewidth}
+      \centering
+      \includegraphics[width=\linewidth,clip,trim=0 4 0 14]{../img/comparison_czesmf_ekf_obstimrad0.01_form3.pdf}
+      \caption{Timing noise $\qty{0.01}{\second}$}
+      \label{fig:mn_trajectory_ekf_vs_cz__001}
+    \end{subfigure}
+    \begin{subfigure}{.225\linewidth}
+      \centering
+      \includegraphics[width=\linewidth,clip,trim=0 4 0 14]{../img/comparison_czesmf_ekf_obstimrad0.5_form3.pdf}
+      \caption{Timing noise $\qty{0.5}{\second}$}
+      \label{fig:mn_trajectory_ekf_vs_cz_05}
+    \end{subfigure}
+    \begin{subfigure}{.7\linewidth}
+      \centering
+      \includegraphics[width=.7\linewidth,clip,trim=0 5 0 11]{../img/comparison_czesmf_ekf_obstimrad0.5_form3_detail_1.pdf}
+      \caption{Detail of (b)}
+      \label{fig:mn_trajectory_ekf_vs_cz_05_detail}
+    \end{subfigure}
+  \end{figure}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Vehicle tracking}{Execution Time}
   \begin{table}[bt]
   \caption{Mean execution times ($\unit{\ms}$) for different observation time errors.}\label{tab:comparison_time}
   \centering
@@ -700,6 +703,30 @@
 
 
 \section{Conclusion}
+
+\begin{frame}{Conclusion}
+
+  \vfill
+  \begin{block}{Main takeaway}
+    Timestamps with jitter may produce false enclosures if not taken into account
+  \end{block}
+  \pause
+
+  We propose the \structure{\czesmflong}, which inflates the observation intervals, and can incorporate multiple propagation models and parametric uncertainty in the observation equation.
+  \pause
+
+  \vfill
+  While the solution is interpreted (MATLAB), it presents good compromise between tightness and computation time ( per iteration)
+
+  \pause
+  \vfill
+  Current work:
+\begin{itemize}
+  \item Compiled implementation for robotic platforms with ``real-time'' computation
+  \item Interaction with ROS 2 framework
+\end{itemize}
+
+\end{frame}
 
 \begin{frame}[plain]
   \endpage%
@@ -722,8 +749,30 @@
 
 \appendix
 
-\begin{frame}{1D Platooning}
-  \begin{figure}[b!]
+\begin{frame}{1D Platooning}{Leader-follower with ranging observations}
+  Relative position and velocity dynamics (with air resistance)
+\begin{align*}
+\left[\begin{matrix}
+    \dot{p}(t)\\\dot{v}(t)
+\end{matrix}\right]=\dot{\vec{x}}(t)
+&=
+\left[\begin{matrix}
+v(t)\\
+-C_D \abs{v(t)}v(t)+ a(t)
+\end{matrix}\right],
+\end{align*}
+
+Ranging observation
+\begin{align*}
+r(t_{y,k}) =
+p \cos(\alpha)^{-1}
++ w_k,
+\label{eq:mn1_h}
+\end{align*}
+\end{frame}
+
+\begin{frame}{1D Platooning}{Enclosure using \czs.}
+\begin{figure}[b!]
     \centering
     %	\caption{1D example: state trajectory and enclosures.}	\label{fig:mn1_trajectory}
     % \begin{subfigure}{\linewidth}
@@ -744,65 +793,6 @@
     \caption{\cz\ enclosures and position and velocity intervals.}
     \label{fig:mn1_p_and_v}
   \end{figure}
-\end{frame}
-
-\begin{frame}
-
-  \vfill
-  \medskip
-  Estimation basée données/modèle.
-  \vfill
-  \pause
-  \begin{itemize}
-    \item<+->[{\color{lockyellow} \faLock}] Pas d'algorithme adéquats
-    \item<+->[{\color{lockgreen} \faKey}] Dévéloppement/Adaptation des méthodes
-  \end{itemize}
-
-  \vfill
-  \onslide<+->{Quelques pistes}
-  \begin{itemize}[<.->] \setbeamertemplate{itemize item}{\articlesymbol}
-    \item
-    \item[\booksymbol] Méthodes de sous-espace ensemblistes\small~\citeauthor{PaulaEtAl2025} \citeyear{PaulaEtAl2025}
-          \setbeamertemplate{itemize item}{}
-
-    \item
-    \item
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Zonotope contraint: \hyperlink{postdoc}{\beamerreturnbutton{retour}}}
-  \vfill
-  \centering
-  \begin{itemize}
-    \item Propriétés similaires au polytopes\\
-          (Clos pour l'intersection et somme de Minkowski)
-          \begin{itemize}[<+(1)->]
-            \item[+] Répresentation facilite exécution des opérations
-            \item[+] Asymétrie $\to$ plus de liberté
-            \item[+] Facilement appliquable pour des systèmes linéaires
-            \item[-] Chaque opération augmente la complexité \\(réduction possible au détriment du volume)
-          \end{itemize}
-  \end{itemize}
-
-  \begin{minipage}[c]{.45\linewidth}
-    \centering
-    \scalebox{3}{
-      \begin{tikzpicture}
-        % \draw [help lines] (-1,-1) grid [step=.1cm] (1,1);
-        \node[] (car_purple_position) {};
-
-        % constrained zonotope
-        \draw[neocampus_yellow,fill=neocampus_yellow] (-0.65,-0.1) -- ++(90:0.2) -- ++(45:0.42) --++(0:0.4) -- ++(-30:0.53) -- ++(-90:0.32) -- ++(210:0.28) --++(180:0.45) --++(160:0.49) -- cycle;
-
-        \path[draw,use Hobby shortcut,closed=true,violet!50!white]
-        % \path[draw,use Hobby shortcut,closed=true,violet!50!white,fill=violet!50!white,opacity=0.5]
-        ($(car_purple_position)+(.5,0)$) .. ++(-.3,.3) .. ++(-.1,.05) .. ++(-0.6,-0.1) ..++(-0.1,-0.4) ..++(0.2,-0.1);
-        \node[] (car_purple) at (car_purple_position) {\includegraphics[height=1cm,angle=90]{neocampus/car_purple}};
-
-      \end{tikzpicture}
-    }
-    \[\set{C}_{\set{Z}}=\setbuild{G\vec{\xi}+\vec{c}}{\norm{\vec{\xi}}_{\infty}\leq 1,A\vec{\xi}=\vec{b}}\]
-  \end{minipage}
 \end{frame}
 
 \end{document}
